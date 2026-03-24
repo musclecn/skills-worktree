@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="694" height="244" viewBox="0 0 694 244" role="img" aria-labelledby="title desc">
+  <title id="title">泰可思 T.A.X Logo</title>
+  <desc id="desc">Company logo with blue emblem and Chinese plus English wordmark.</desc>
+  <defs>
+    <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#43a5ea"/>
+      <stop offset="100%" stop-color="#0f5ab4"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="92" cy="92" rx="86" ry="74" fill="url(#blueGrad)" stroke="#0f5ab4" stroke-width="2"/>
+  <path d="M34 72h112v22h-43v72h-24V94H34z" fill="#ffffff"/>
+  <path d="M142 108c-13 28-34 49-63 66v14c40-13 70-39 88-79z" fill="#7eb533"/>
+
+  <text x="176" y="112" fill="#18479a" font-size="88" font-weight="700" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif">
+    泰可思
+  </text>
+  <text x="178" y="192" fill="#18479a" font-size="64" font-weight="700" letter-spacing="2" font-family="'Plus Jakarta Sans','Arial',sans-serif">
+    T.A.X
+  </text>
+</svg>

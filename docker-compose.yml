@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    container_name: sztaxs-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: file:/app/data/sztaxs.db
+      SESSION_SECRET: ${SESSION_SECRET:-replace-me}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_TRANSLATION_MODEL: ${OPENAI_TRANSLATION_MODEL:-gpt-4.1-mini}
+    volumes:
+      - ./data:/app/data
+      - ./public/uploads:/app/public/uploads
