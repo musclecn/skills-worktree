@@ -1,0 +1,32 @@
+<svg width="1400" height="760" viewBox="0 0 1400 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FBFF"/>
+      <stop offset="1" stop-color="#EAF2FC"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#0D386F" flood-opacity="0.16"/></filter>
+  </defs>
+  <rect width="1400" height="760" rx="44" fill="url(#bg)"/>
+  <circle cx="1140" cy="150" r="190" fill="#DCEBFF" opacity="0.55"/>
+  <circle cx="120" cy="650" r="220" fill="#E6F8F3" opacity="0.8"/>
+  <text x="92" y="118" fill="#10335F" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="44" font-weight="900">各国电子发票推广节奏</text>
+  <text x="92" y="160" fill="#5F738D" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="22" font-weight="600">按区域沉淀强制节点、平台模式与持续合规要求，支撑出海企业提前规划。</text>
+  <g transform="translate(92 220)" filter="url(#shadow)">
+    <rect width="1220" height="404" rx="32" fill="white" fill-opacity="0.86" stroke="#D3E2F4"/>
+    <path d="M86 284H1128" stroke="#D4E4F6" stroke-width="4" stroke-linecap="round"/>
+    <g font-family="PingFang SC, Microsoft YaHei, Arial">
+      <circle cx="112" cy="284" r="16" fill="#0A5AB5"/><text x="82" y="240" fill="#10335F" font-size="24" font-weight="800">欧洲</text><text x="56" y="328" fill="#657890" font-size="16">2025-2028</text>
+      <circle cx="320" cy="284" r="16" fill="#10A678"/><text x="290" y="240" fill="#10335F" font-size="24" font-weight="800">亚洲</text><text x="266" y="328" fill="#657890" font-size="16">多国已强制</text>
+      <circle cx="528" cy="284" r="16" fill="#D87918"/><text x="494" y="240" fill="#10335F" font-size="24" font-weight="800">美洲</text><text x="468" y="328" fill="#657890" font-size="16">实时清关</text>
+      <circle cx="736" cy="284" r="16" fill="#2E7DE7"/><text x="690" y="240" fill="#10335F" font-size="24" font-weight="800">中东</text><text x="680" y="328" fill="#657890" font-size="16">2026起提速</text>
+      <circle cx="944" cy="284" r="16" fill="#7B61FF"/><text x="906" y="240" fill="#10335F" font-size="24" font-weight="800">非洲</text><text x="884" y="328" fill="#657890" font-size="16">分阶段覆盖</text>
+      <circle cx="1130" cy="284" r="16" fill="#0B5EB6"/><text x="1082" y="240" fill="#10335F" font-size="24" font-weight="800">大洋洲</text><text x="1064" y="328" fill="#657890" font-size="16">B2G强制</text>
+    </g>
+  </g>
+  <g transform="translate(135 490)" font-family="PingFang SC, Microsoft YaHei, Arial">
+    <rect width="246" height="94" rx="18" fill="#EDF6FF" stroke="#C7DDF6"/><text x="22" y="38" fill="#0A5AB5" font-size="20" font-weight="800">法国 / 德国 / 波兰</text><text x="22" y="68" fill="#5F738D" font-size="16">接收、发送强制节点明确</text>
+    <rect x="292" width="246" height="94" rx="18" fill="#EEFAF6" stroke="#BFE5DC"/><text x="314" y="38" fill="#0A8D67" font-size="20" font-weight="800">越南 / 马来西亚</text><text x="314" y="68" fill="#5F738D" font-size="16">已进入全面强制阶段</text>
+    <rect x="584" width="246" height="94" rx="18" fill="#FFF7EA" stroke="#F0D4A8"/><text x="606" y="38" fill="#C96D14" font-size="20" font-weight="800">巴西 / 墨西哥</text><text x="606" y="68" fill="#5F738D" font-size="16">本地平台实时清关</text>
+    <rect x="876" width="246" height="94" rx="18" fill="#F2F0FF" stroke="#D5CEF9"/><text x="898" y="38" fill="#6350D6" font-size="20" font-weight="800">沙特 / 阿联酋</text><text x="898" y="68" fill="#5F738D" font-size="16">ZATCA/2026节点推进</text>
+  </g>
+</svg>

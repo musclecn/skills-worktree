@@ -25,6 +25,9 @@ export default async function AdminProtectedLayout({
           <Link href="/admin/products">产品管理</Link>
           <Link href="/admin/solutions">方案管理</Link>
           <Link href="/admin/news">新闻管理</Link>
+          <Link href="/admin/appointments">预约管理</Link>
+          <Link href="/admin/analytics">访问统计</Link>
+          <Link href="/admin/short-videos">视频管理</Link>
           <Link href="/admin/media">媒体库</Link>
           {user.role === "ADMIN" ? <Link href="/admin/users">用户管理</Link> : null}
         </nav>

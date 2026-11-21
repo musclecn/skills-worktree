@@ -1,0 +1,61 @@
+<svg width="1400" height="760" viewBox="0 0 1400 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.55" stop-color="#EAF4FF"/>
+      <stop offset="1" stop-color="#DDEBFF"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="104" y1="92" x2="1190" y2="664" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A5AB5"/>
+      <stop offset="1" stop-color="#2E8BFF"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#0B3A78" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1400" height="760" rx="44" fill="url(#bg)"/>
+  <path d="M108 604C235 514 315 271 510 314C687 353 707 500 855 456C1004 411 1055 222 1294 174" stroke="#9BC7FF" stroke-width="3" stroke-dasharray="8 14" opacity="0.8"/>
+  <path d="M156 204H1250" stroke="#CFE2F7" stroke-width="2"/>
+  <path d="M156 384H1250" stroke="#CFE2F7" stroke-width="2"/>
+  <path d="M156 564H1250" stroke="#CFE2F7" stroke-width="2"/>
+  <path d="M260 110V650" stroke="#D7E6F7" stroke-width="2"/>
+  <path d="M520 110V650" stroke="#D7E6F7" stroke-width="2"/>
+  <path d="M780 110V650" stroke="#D7E6F7" stroke-width="2"/>
+  <path d="M1040 110V650" stroke="#D7E6F7" stroke-width="2"/>
+  <g filter="url(#shadow)">
+    <rect x="94" y="82" width="1212" height="596" rx="34" fill="white" fill-opacity="0.78" stroke="#D5E5F7"/>
+  </g>
+  <text x="132" y="146" fill="#10335F" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="44" font-weight="800">海外电子发票平台覆盖版图</text>
+  <text x="132" y="188" fill="#5D728D" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="22" font-weight="600">31 个已支持国家/地区，覆盖亚太、欧洲、中东、非洲、美洲与大洋洲重点市场</text>
+  <g transform="translate(133 246)">
+    <rect width="238" height="128" rx="24" fill="#EDF6FF" stroke="#BFD9F5"/>
+    <text x="28" y="48" fill="#0A5AB5" font-family="Arial" font-size="38" font-weight="900">13+</text>
+    <text x="28" y="84" fill="#133C6B" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="24" font-weight="800">亚太重点市场</text>
+    <text x="28" y="110" fill="#607692" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="16">越南 / 马来西亚 / 日本等</text>
+  </g>
+  <g transform="translate(413 246)">
+    <rect width="238" height="128" rx="24" fill="#F1F7FF" stroke="#BFD9F5"/>
+    <text x="28" y="48" fill="#0A5AB5" font-family="Arial" font-size="38" font-weight="900">12+</text>
+    <text x="28" y="84" fill="#133C6B" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="24" font-weight="800">欧洲覆盖国家</text>
+    <text x="28" y="110" fill="#607692" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="16">法国 / 德国 / 波兰等</text>
+  </g>
+  <g transform="translate(693 246)">
+    <rect width="238" height="128" rx="24" fill="#EDF9F6" stroke="#BFE5DC"/>
+    <text x="28" y="48" fill="#10A678" font-family="Arial" font-size="38" font-weight="900">4+</text>
+    <text x="28" y="84" fill="#133C6B" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="24" font-weight="800">中东非市场</text>
+    <text x="28" y="110" fill="#607692" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="16">沙特 / 阿联酋 / 埃及等</text>
+  </g>
+  <g transform="translate(973 246)">
+    <rect width="238" height="128" rx="24" fill="#FFF7EA" stroke="#F0D4A8"/>
+    <text x="28" y="48" fill="#D87918" font-family="Arial" font-size="38" font-weight="900">3+</text>
+    <text x="28" y="84" fill="#133C6B" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="24" font-weight="800">美洲与大洋洲</text>
+    <text x="28" y="110" fill="#607692" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="16">巴西 / 墨西哥 / 美国等</text>
+  </g>
+  <g transform="translate(134 442)">
+    <rect width="1076" height="148" rx="28" fill="url(#blue)" opacity="0.96"/>
+    <text x="34" y="55" fill="white" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="28" font-weight="800">国家清单能力沉淀</text>
+    <text x="34" y="94" fill="#E8F4FF" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="20" font-weight="600">菲律宾、马来西亚、越南、日本、法国、波兰、土耳其、西班牙、沙特、埃及、印尼、泰国、阿联酋、德国、巴西等市场已纳入覆盖清单。</text>
+    <circle cx="994" cy="72" r="34" fill="white" fill-opacity="0.16"/>
+    <path d="M975 72L989 86L1017 56" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -224,6 +224,7 @@ CREATE TABLE IF NOT EXISTS "SolutionArchitectureBlock" (
 CREATE TABLE IF NOT EXISTS "NewsPost" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "slug" TEXT NOT NULL,
+    "newsCategory" TEXT NOT NULL DEFAULT 'COMPANY',
     "titleZh" TEXT NOT NULL,
     "titleEn" TEXT NOT NULL,
     "summaryZh" TEXT,
@@ -231,12 +232,64 @@ CREATE TABLE IF NOT EXISTS "NewsPost" (
     "contentZh" TEXT NOT NULL,
     "contentEn" TEXT NOT NULL,
     "coverUrl" TEXT,
+    "sourceName" TEXT,
+    "sourceUrl" TEXT,
+    "externalId" TEXT,
+    "relatedPath" TEXT,
+    "relatedLabelZh" TEXT,
+    "relatedLabelEn" TEXT,
     "publishStatus" TEXT NOT NULL DEFAULT 'PUBLISHED',
     "publishedAt" DATETIME,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "translationStatus" TEXT NOT NULL DEFAULT 'REVIEWED',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE IF NOT EXISTS "AppointmentRequest" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "companyName" TEXT NOT NULL,
+    "contactName" TEXT NOT NULL,
+    "contactInfo" TEXT NOT NULL,
+    "sourcePage" TEXT,
+    "notes" TEXT,
+    "topic" TEXT,
+    "locale" TEXT,
+    "sessionId" TEXT,
+    "landingPath" TEXT,
+    "referrerHost" TEXT,
+    "utmSource" TEXT,
+    "utmMedium" TEXT,
+    "utmCampaign" TEXT,
+    "prevPath" TEXT,
+    "articleSlug" TEXT,
+    "productPath" TEXT,
+    "entryId" TEXT,
+    "submissionId" TEXT,
+    "ipHash" TEXT,
+    "deviceClass" TEXT,
+    "contactKey" TEXT,
+    "reviewStatus" TEXT NOT NULL DEFAULT 'PENDING',
+    "anomalyFlags" TEXT,
+    "reviewedAt" DATETIME,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE IF NOT EXISTS "SiteEvent" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "sessionId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
+    "locale" TEXT NOT NULL,
+    "target" TEXT,
+    "entryId" TEXT,
+    "articleSlug" TEXT,
+    "device" TEXT,
+    "referrerHost" TEXT
 );
 
 -- CreateTable
@@ -294,3 +347,24 @@ CREATE UNIQUE INDEX IF NOT EXISTS "NewsPost_slug_key" ON "NewsPost"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX IF NOT EXISTS "SeoMeta_pageKey_locale_key" ON "SeoMeta"("pageKey", "locale");
+
+-- CreateIndex
+CREATE UNIQUE INDEX IF NOT EXISTS "AppointmentRequest_submissionId_key" ON "AppointmentRequest"("submissionId");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "AppointmentRequest_createdAt_idx" ON "AppointmentRequest"("createdAt");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "AppointmentRequest_contactKey_createdAt_idx" ON "AppointmentRequest"("contactKey", "createdAt");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "AppointmentRequest_ipHash_createdAt_idx" ON "AppointmentRequest"("ipHash", "createdAt");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "SiteEvent_createdAt_idx" ON "SiteEvent"("createdAt");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "SiteEvent_type_createdAt_idx" ON "SiteEvent"("type", "createdAt");
+
+-- CreateIndex
+CREATE INDEX IF NOT EXISTS "SiteEvent_sessionId_idx" ON "SiteEvent"("sessionId");

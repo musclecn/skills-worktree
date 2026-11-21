@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { NewsView } from "@/components/public/public-pages";
+import { parseNewsCategory } from "@/lib/data";
 import { buildSeoMetadataByPageKey } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,10 +14,17 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function EnNewsPage() {
+export default async function EnNewsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string; notice?: string }>;
+}) {
+  const resolved = searchParams ? await searchParams : undefined;
+  const category = parseNewsCategory(resolved?.category);
+
   return (
     <PublicChrome locale="en">
-      <NewsView locale="en" />
+      <NewsView locale="en" category={category} untranslatedNotice={resolved?.notice === "untranslated"} />
     </PublicChrome>
   );
 }

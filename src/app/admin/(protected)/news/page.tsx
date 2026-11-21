@@ -7,6 +7,7 @@ export default function AdminNewsPage() {
       endpoint="/api/admin/news"
       fields={[
         { key: "slug", label: "slug" },
+        { key: "newsCategory", label: "新闻分类", type: "select", options: ["COMPANY", "INDUSTRY"] },
         { key: "titleZh", label: "标题（中文）" },
         { key: "titleEn", label: "标题（英文）" },
         { key: "summaryZh", label: "摘要（中文）", type: "textarea" },
@@ -14,12 +15,19 @@ export default function AdminNewsPage() {
         { key: "contentZh", label: "正文（中文）", type: "textarea" },
         { key: "contentEn", label: "正文（英文）", type: "textarea" },
         { key: "coverUrl", label: "封面 URL" },
+        { key: "sourceName", label: "来源名称" },
+        { key: "sourceUrl", label: "来源链接" },
+        { key: "externalId", label: "外部唯一ID" },
+        { key: "relatedPath", label: "相关入口路径（站内中文路径，如 /solutions/leqi-joint-use-solution；留空不显示）" },
+        { key: "relatedLabelZh", label: "相关入口文案（中文）" },
+        { key: "relatedLabelEn", label: "相关入口文案（英文）" },
         { key: "publishedAt", label: "发布时间(ISO)" },
         { key: "sortOrder", label: "排序", type: "number" },
         { key: "publishStatus", label: "发布状态", type: "select", options: ["DRAFT", "PUBLISHED", "ARCHIVED"] },
         { key: "translationStatus", label: "翻译状态", type: "select", options: ["DRAFT", "MACHINE_TRANSLATED", "REVIEWED"] },
       ]}
       defaults={{
+        newsCategory: "COMPANY",
         sortOrder: 0,
         publishStatus: "PUBLISHED",
         translationStatus: "REVIEWED",

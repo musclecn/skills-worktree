@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { NewsView } from "@/components/public/public-pages";
+import { parseNewsCategory } from "@/lib/data";
 import { buildSeoMetadataByPageKey } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,10 +14,17 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function ZhNewsPage() {
+export default async function ZhNewsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string }>;
+}) {
+  const resolved = searchParams ? await searchParams : undefined;
+  const category = parseNewsCategory(resolved?.category);
+
   return (
     <PublicChrome locale="zh">
-      <NewsView locale="zh" />
+      <NewsView locale="zh" category={category} />
     </PublicChrome>
   );
 }

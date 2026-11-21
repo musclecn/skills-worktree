@@ -32,3 +32,56 @@ export function localizePath(locale: AppLocale, path: string) {
   }
   return `/en${path}`;
 }
+
+/** 只存在英文版的路径（去掉 /en 前缀后），切回中文时落到首页。 */
+const EN_ONLY_PATHS = new Set(["/export-sales-reconciliation"]);
+
+/** 语言切换时保留的查询参数及其允许值。 */
+const KEPT_QUERY_VALUES: Record<string, Set<string>> = {
+  category: new Set(["company", "industry"]),
+};
+
+function stripEnPrefix(pathname: string) {
+  if (pathname === "/en") return "/";
+  if (pathname.startsWith("/en/")) return pathname.slice(3);
+  return pathname;
+}
+
+/**
+ * 计算当前页面在另一种语言下的地址，保留同一内容和列表筛选条件。
+ * `currentLocale` 是当前页面的语言，返回值指向另一种语言。
+ */
+export function getAlternateHref(
+  currentLocale: AppLocale,
+  pathname: string,
+  search?: string | URLSearchParams | null,
+) {
+  const cleanPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") || "/" : pathname || "/";
+  const basePath = stripEnPrefix(cleanPath);
+  const targetLocale: AppLocale = currentLocale === "zh" ? "en" : "zh";
+
+  let targetPath: string;
+  if (targetLocale === "zh") {
+    targetPath = EN_ONLY_PATHS.has(basePath) ? "/" : basePath;
+  } else {
+    targetPath = localizePath("en", basePath);
+  }
+
+  const source = typeof search === "string" ? new URLSearchParams(search) : search;
+  const kept = new URLSearchParams();
+  if (source && targetPath !== "/" && targetPath !== "/en") {
+    for (const [key, allowed] of Object.entries(KEPT_QUERY_VALUES)) {
+      const value = source.get(key)?.trim().toLowerCase();
+      if (value && allowed.has(value)) kept.set(key, value);
+    }
+  }
+
+  const query = kept.toString();
+  return query ? `${targetPath}?${query}` : targetPath;
+}
+
+/** 根据请求路径判断页面语言，用于 <html lang>。 */
+export function localeFromPathname(pathname: string | null | undefined): AppLocale {
+  if (!pathname) return DEFAULT_LOCALE;
+  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "zh";
+}

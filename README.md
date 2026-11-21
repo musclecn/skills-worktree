@@ -39,6 +39,10 @@ cp .env.example .env
 - `SESSION_SECRET`：登录会话密钥
 - `OPENAI_API_KEY` / `OPENAI_TRANSLATION_MODEL`：自动翻译（可选）
 - `NEXT_PUBLIC_SITE_URL`：站点公开访问地址（用于 SEO metadata、`sitemap.xml`、`robots.txt`）
+- `OPENCLAW_INGEST_TOKEN`：OpenClaw 新闻采集入库接口鉴权令牌
+- `APPOINTMENT_NOTIFY_TO`：预约表单通知收件人，默认 `szwmg@163.com`
+- `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM`：预约通知邮件 SMTP 配置，可使用阿里云企业邮箱或 DirectMail SMTP
+- `SHORT_VIDEO_DIR` / `SHORT_VIDEO_PUBLIC_PATH`：短视频展示栏目目录与公开访问路径，生产环境建议将目录挂载到数据盘
 
 3. 初始化数据库结构 + 种子数据
 
@@ -101,6 +105,14 @@ docker-compose up -d --build
 - `GET /api/public/products?lang=zh|en[&slug=...]`
 - `GET /api/public/solutions?lang=zh|en[&slug=...]`
 - `GET /api/public/news?lang=zh|en[&slug=...]`
+  - 支持分类筛选：`GET /api/public/news?lang=zh|en&category=company|industry`
+
+采集发布接口（OpenClaw 推送）：
+
+- `POST /api/openclaw/news`
+- 鉴权：`Authorization: Bearer <OPENCLAW_INGEST_TOKEN>` 或 `x-openclaw-token` 头
+- 支持单条对象或批量：`{ "items": [ ... ] }`
+- 默认按“行业新闻”分类并直接发布，按 `externalId` / `sourceUrl` / `slug` 去重更新
 
 后台接口（需登录）：
 
@@ -109,6 +121,55 @@ docker-compose up -d --build
 - `GET /api/admin/auth/me`
 - `POST /api/admin/translate`
 - 其余 `/api/admin/*` 为栏目、页面、产品、方案、新闻、媒体、用户管理 CRUD。
+
+OpenClaw 推送示例：
+
+```bash
+curl -X POST http://localhost:3000/api/openclaw/news \
+  -H "Authorization: Bearer ${OPENCLAW_INGEST_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      {
+        "externalId": "openclaw-20260406-001",
+        "category": "INDUSTRY",
+        "titleZh": "行业政策更新示例",
+        "summaryZh": "这是采集接口推送的行业新闻摘要。",
+        "contentZh": "这是采集接口推送的行业新闻正文。",
+        "sourceName": "OpenClaw",
+        "sourceUrl": "https://example.com/news/1",
+        "publishedAt": "2026-04-06T08:00:00.000Z"
+      }
+    ]
+  }'
+```
+
+## 短视频上传 CLI
+
+网站的“短视频展示”栏目会读取服务器数据盘目录 `/data/sztaxs-web-media/short-videos`。
+本地生成短视频后，可直接用 CLI 上传：
+
+```bash
+npm run upload:short-video -- "/path/to/video.mp4"
+```
+
+上传某个目录下全部视频：
+
+```bash
+npm run upload:short-video -- "/path/to/video-folder"
+```
+
+只上传某个目录下最新生成的视频：
+
+```bash
+npm run upload:short-video -- --latest "/path/to/video-folder"
+```
+
+默认读取 `~/Desktop/keys1.txt` 中的服务器密码，也可以用环境变量覆盖：
+
+```bash
+SZTAXS_SSH_PASSWORD="******" npm run upload:short-video -- "/path/to/video.mp4"
+```
 
 ## 测试
 

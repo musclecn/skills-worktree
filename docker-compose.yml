@@ -9,9 +9,25 @@ services:
       NODE_ENV: production
       PORT: 3000
       DATABASE_URL: file:/app/data/sztaxs.db
+      DB_BACKUP_DIR: /app/db-backups
+      DB_BACKUP_TZ: Asia/Shanghai
       SESSION_SECRET: ${SESSION_SECRET:-replace-me}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_TRANSLATION_MODEL: ${OPENAI_TRANSLATION_MODEL:-gpt-4.1-mini}
+      OPENCLAW_INGEST_TOKEN: ${OPENCLAW_INGEST_TOKEN:-}
+      APPOINTMENT_NOTIFY_TO: ${APPOINTMENT_NOTIFY_TO:-szwmg@163.com}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME:-泰可思官网}
+      SHORT_VIDEO_DIR: /app/public/short-videos
+      SHORT_VIDEO_PUBLIC_PATH: /short-videos
     volumes:
       - ./data:/app/data
+      - ../sztaxs-web-db-backups:/app/db-backups
       - ./public/uploads:/app/public/uploads
+      - ${RECEIPT_VIDEO_DIR:-./public/receipt-system/videos}:/app/public/receipt-system/videos:ro
+      - ${SHORT_VIDEO_DIR:-./public/short-videos}:/app/public/short-videos

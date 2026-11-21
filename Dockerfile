@@ -1,9 +1,10 @@
-FROM node:22-bookworm-slim
+FROM node:20-bookworm
 
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY package*.json ./
+COPY package*.json prisma.config.ts ./
+COPY prisma ./prisma
 RUN npm ci
 
 COPY . .

@@ -1,11 +1,12 @@
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboardPage() {
-  const [products, solutions, news, pages] = await Promise.all([
+  const [products, solutions, news, pages, appointments] = await Promise.all([
     prisma.product.count(),
     prisma.solution.count(),
     prisma.newsPost.count(),
     prisma.page.count(),
+    prisma.appointmentRequest.count(),
   ]);
 
   return (
@@ -28,6 +29,10 @@ export default async function AdminDashboardPage() {
           <article className="card">
             <h3>页面</h3>
             <p>{pages}</p>
+          </article>
+          <article className="card">
+            <h3>预约</h3>
+            <p>{appointments}</p>
           </article>
         </div>
       </div>

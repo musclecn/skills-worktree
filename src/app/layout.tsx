@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
@@ -8,13 +9,15 @@ export const metadata: Metadata = {
   description: "泰可思新官网系统，支持前后台栏目与内容配置",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = (await headers()).get("x-site-locale") === "en" ? "en" : "zh-CN";
+
   return (
-    <html lang="zh-CN">
+    <html lang={locale}>
       <body>{children}</body>
     </html>
   );

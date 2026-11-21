@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { NewsDetailView } from "@/components/public/public-pages";
-import { getNewsDetail } from "@/lib/data";
+import { getNewsDetail, getNewsEnglishAvailability } from "@/lib/data";
 import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -27,8 +27,12 @@ export default async function ZhNewsDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  // 没有英文译文时，语言切换落到英文新闻列表并提示，而不是首页。
+  const hasEnglish = await getNewsEnglishAvailability(slug);
+  const langSwitchHref = hasEnglish === false ? "/en/news?notice=untranslated" : undefined;
+
   return (
-    <PublicChrome locale="zh">
+    <PublicChrome locale="zh" langSwitchHref={langSwitchHref}>
       <NewsDetailView locale="zh" slug={slug} />
     </PublicChrome>
   );

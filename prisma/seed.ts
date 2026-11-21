@@ -1,4 +1,5 @@
 import {
+  NewsCategory,
   PrismaClient,
   PublishStatus,
   TranslationStatus,
@@ -35,6 +36,34 @@ type ProductSeed = {
       descriptionEn: string;
       iconUrl?: string;
     }[];
+  }[];
+};
+
+type SolutionSeed = {
+  slug: string;
+  titleZh: string;
+  titleEn: string;
+  summaryZh: string;
+  summaryEn: string;
+  coverUrl?: string;
+  painPoints: {
+    titleZh: string;
+    titleEn: string;
+    descriptionZh: string;
+    descriptionEn: string;
+  }[];
+  advantages: {
+    titleZh: string;
+    titleEn: string;
+    descriptionZh: string;
+    descriptionEn: string;
+  }[];
+  architectures?: {
+    titleZh: string;
+    titleEn: string;
+    descriptionZh: string;
+    descriptionEn: string;
+    imageUrl?: string;
   }[];
 };
 
@@ -819,116 +848,243 @@ const PRODUCT_OVERRIDES: Record<string, ProductSeed> = {
   },
   "global-tax-intelligence-platform": {
     slug: "global-tax-intelligence-platform",
-    nameZh: "海外全球税务数智化平台",
-    nameEn: "Global Tax Intelligence Platform",
+    nameZh: "海外电子发票解决方案",
+    nameEn: "Overseas E-invoicing Solution",
     summaryZh:
-      "面向跨国与出海企业，围绕全球间接税、直接税与政策知识库构建一体化数智平台，覆盖开票、计税、申报、归档与风险预警全流程。",
+      "面向在海外投资与出海企业，围绕海外电子发票法规、自动化开票、税局备案与持续运营提供一体化落地方案。",
     summaryEn:
-      "An integrated platform for multinational and overseas businesses covering global indirect tax, direct tax, and policy intelligence across invoicing, calculation, filing, archiving, and risk alerts.",
-    bannerUrl: "/uploads/ppt-overseas/image2.png",
+      "An integrated overseas e-invoicing solution for multinational and outbound businesses covering country rollout, automated invoicing, tax authority filing, and ongoing operations.",
+    bannerUrl: "/ppt-slides/ppt-overseas/slide-020.png",
     sections: [
       {
-        sectionType: "indirect-tax",
-        titleZh: "全球间接税与电票全生命周期管理",
-        titleEn: "Global Indirect Tax and E-invoice Lifecycle",
+        sectionType: "market",
+        titleZh: "海外电子发票制度与落地要求",
+        titleEn: "Overseas E-invoicing Rules and Rollout Requirements",
         descriptionZh:
-          "覆盖多区域开票、智能计税、汇率换算、AI识别与归档追溯，适配跨境电商与多国家/地区发票管理场景。",
+          "梳理海外电子发票的纳税人范围、适用对象、开票方式、时间要求与错误处理规则。",
         descriptionEn:
-          "Covers multi-region invoicing, intelligent tax calculation, FX conversion, AI extraction, and archive traceability for cross-border invoice operations.",
+          "Captures overseas e-invoicing scope, taxpayer eligibility, issuance methods, timing requirements, and exception handling across supported markets.",
+        imageUrl: "/ppt-slides/ppt-overseas/slide-020.png",
         items: [
           {
-            titleZh: "18 个主流国家/地区开票覆盖",
-            titleEn: "Coverage Across 18 Major Regions",
+            titleZh: "准入范围与适用对象",
+            titleEn: "Coverage and Eligibility",
             descriptionZh:
-              "支持 18 个主流国家/地区税务规则，部分地区可直连当地税局 API，并具备 PEPPOL 接入能力，满足跨境发票无缝传输需求。",
+              "覆盖中国企业在越投资的纳税人范围、征税对象与发票使用主体，帮助业务、财务和税务团队一次性厘清是否纳入电子发票体系。",
             descriptionEn:
-              "Supports tax rules across 18 major countries or regions, with direct authority API access in selected markets and PEPPOL-based cross-border invoice exchange.",
+              "Clarifies taxpayer scope, taxable activities, and issuer eligibility for China-backed entities operating in Vietnam.",
           },
           {
-            titleZh: "智能计税与汇率换算",
-            titleEn: "Intelligent Tax and FX Conversion",
+            titleZh: "开票方式、时间与格式要求",
+            titleEn: "Issuance Methods, Timing, and Format",
             descriptionZh:
-              "内置各国间接税计税模块，自动适配税制差异、实时同步全球汇率，支持多币种金额换算与复杂税额计算。",
+              "覆盖税务局直连、授权服务商、混合管理等开票方式，以及发票类型、内容明细、XML 格式、开票时点与备案节奏要求。",
             descriptionEn:
-              "Built-in indirect-tax engines adapt to country-specific rules, synchronize exchange rates in real time, and support multi-currency tax calculations.",
+              "Covers issuance models, invoice content rules, XML formatting, timing constraints, and filing cadence required by Vietnam regulations.",
           },
           {
-            titleZh: "AI 识别、校验与归档",
-            titleEn: "AI Extraction, Validation, and Archiving",
+            titleZh: "错误处理与政策节奏跟踪",
+            titleEn: "Error Handling and Policy Timeline",
             descriptionZh:
-              "结合 OCR 与税务大模型提取多语言、非标票据核心要素，自动完成合规校验、标签分类、标准化底稿与资料归档。",
+              "同步发票错误处理、作废/调整机制以及实施时间线，减少项目上线后因政策理解偏差造成的返工与处罚风险。",
             descriptionEn:
-              "Combines OCR and tax LLM capability to extract multilingual invoice data, validate compliance, classify records, and produce standardized drafts and archives.",
+              "Tracks correction workflows, adjustment handling, and rollout milestones to reduce rework and penalties during go-live.",
           },
         ],
       },
       {
-        sectionType: "direct-tax",
-        titleZh: "全球直接税合规计税与申报",
-        titleEn: "Global Direct Tax Compliance and Filing",
+        sectionType: "coverage",
+        titleZh: "31 个国家/地区电子发票覆盖清单",
+        titleEn: "E-invoicing Coverage Across 31 Countries and Regions",
         descriptionZh:
-          "围绕企业所得税、预提税、转让定价、常设机构与税收协定应用，打通数据归集、税基核算、申报流转与审计留痕。",
+          "根据《海外电子发票支持的国家清单》补充平台已覆盖国家/地区，并按市场区域归集形成出海客户可快速查看的覆盖版图。",
         descriptionEn:
-          "Supports CIT, withholding tax, transfer pricing, permanent establishment risk, and treaty application from data intake through filing and audit traceability.",
+          "Based on the supported-country list, this section summarizes covered countries and regions into a clear market coverage map for overseas operations.",
+        imageUrl: "/products/global-einvoice-coverage.svg",
         items: [
           {
-            titleZh: "全球规则库与税收协定匹配",
-            titleEn: "Global Rule and Treaty Library",
+            titleZh: "亚太与大洋洲重点市场",
+            titleEn: "Asia-Pacific and Oceania Markets",
             descriptionZh:
-              "内置全球直接税规则与数千份税收协定，由税务专家持续维护，支持优惠资格判断、双重征税规避与属地合规测算。",
+              "覆盖菲律宾、马来西亚、越南、日本、印度尼西亚、孟加拉国、泰国、巴基斯坦、中国香港、中国台湾、新加坡、韩国、澳大利亚等市场，支撑亚洲区域多主体电子发票建设。",
             descriptionEn:
-              "A tax-expert-maintained global direct-tax and treaty library supports incentive qualification, double-taxation avoidance, and local compliance calculation.",
+              "Covers the Philippines, Malaysia, Vietnam, Japan, Indonesia, Bangladesh, Thailand, Pakistan, Hong Kong, Taiwan, Singapore, Korea, Australia, and other APAC markets.",
           },
           {
-            titleZh: "复杂场景核算与专项管理",
-            titleEn: "Complex Calculations and Special Topics",
+            titleZh: "欧洲与中东非重点市场",
+            titleEn: "Europe, Middle East, and Africa Markets",
             descriptionZh:
-              "自动完成税基核算、纳税调整与跨境专项台账，覆盖转让定价、境外投资、预提税与常设机构风险识别等复杂场景。",
+              "覆盖法国、波兰、土耳其、西班牙、德国、保加利亚、俄罗斯、意大利、英国、匈牙利、瑞典、荷兰、沙特阿拉伯、阿联酋、埃及等重点市场。",
             descriptionEn:
-              "Automates tax-base calculation, adjustments, and cross-border ledgers for transfer pricing, overseas investment, withholding tax, and PE risk scenarios.",
+              "Covers France, Poland, Turkey, Spain, Germany, Bulgaria, Russia, Italy, the UK, Hungary, Sweden, the Netherlands, Saudi Arabia, the UAE, Egypt, and other key markets.",
           },
           {
-            titleZh: "申报底稿、流转与归档闭环",
-            titleEn: "Draft, Filing Flow, and Archive Closure",
+            titleZh: "美洲重点市场",
+            titleEn: "Americas Markets",
             descriptionZh:
-              "支持 1:1 适配各国官方申报表、自动填充数据、一键导出申报文件，并将全流程数据留痕归档，满足审计与监管要求。",
+              "覆盖巴西、墨西哥、美国等美洲市场，兼顾拉美实时清关模式和北美 B2G/B2B 分阶段推广场景。",
             descriptionEn:
-              "Matches official filing forms country by country, pre-fills returns, exports filing packages, and keeps full audit trails for compliance and audit review.",
+              "Covers Brazil, Mexico, and the United States, supporting Latin American clearance models and phased B2G/B2B rollout scenarios in North America.",
           },
         ],
       },
       {
-        sectionType: "knowledge-base",
-        titleZh: "全球财税知识库与政策响应",
-        titleEn: "Global Tax Knowledge Base and Policy Response",
+        sectionType: "policy-map",
+        titleZh: "各国电子发票推广与强制时间节点",
+        titleEn: "Country Rollout and Mandatory Timeline Map",
         descriptionZh:
-          "通过自动知识采集引擎、多语言翻译与智能问答能力，实现全球政策分钟级感知、风险提示与知识闭环。",
+          "根据《各国电子发票情况说明》补充 76 个国家/地区的电子发票支持状态和推广节点，按欧洲、亚洲、美洲、中东、非洲、大洋洲归纳关键政策趋势。",
         descriptionEn:
-          "Combines automated collection, multilingual translation, and intelligent Q&A for near-real-time policy awareness and actionable tax insight.",
+          "Based on the country e-invoicing notes, this section summarizes support status and rollout timelines across 76 countries and regions by Europe, Asia, Americas, Middle East, Africa, and Oceania.",
+        imageUrl: "/products/global-einvoice-policy-map.svg",
         items: [
           {
-            titleZh: "200+ 国家/地区政策自动采集",
-            titleEn: "Automated Collection Across 200+ Jurisdictions",
+            titleZh: "欧洲：2025-2028 年集中进入强制窗口",
+            titleEn: "Europe: 2025-2028 Mandatory Windows",
             descriptionZh:
-              "7×24 小时持续抓取全球财税政策，通过 NLP 与 OCR 结构化入库，实现分钟级更新与属地监管动态跟踪。",
+              "德国 2025 年起接收强制、法国 2026/2027 年分阶段接收与发送强制、波兰 2026 年 KSeF 分批强制，欧洲市场整体从 B2G 向 B2B 结构化电票加速推进。",
             descriptionEn:
-              "Collects global tax policy updates 24/7 with NLP and OCR structuring for minute-level ingestion and jurisdiction tracking.",
+              "Germany starts mandatory receipt in 2025, France phases receipt and issuance mandates in 2026/2027, and Poland rolls out KSeF mandates in 2026, showing Europe moving from B2G to structured B2B e-invoicing.",
           },
           {
-            titleZh: "30+ 语言智能检索与问答",
-            titleEn: "Search and Q&A in 30+ Languages",
+            titleZh: "亚洲：多国已进入全面覆盖或快速扩围",
+            titleEn: "Asia: Broad Coverage and Rapid Expansion",
             descriptionZh:
-              "支持多语种自然语言问答、专业术语校准与本地化解读，帮助跨境团队快速定位政策原文、案例与实操指南。",
+              "中国数电发票全面推广，越南 2022 年已强制实施，马来西亚 2024 年起全面强制，日本、韩国、印度尼西亚、泰国等市场持续扩大合规范围。",
             descriptionEn:
-              "Supports multilingual natural-language search, terminology normalization, and local interpretation for rapid access to policy texts, cases, and practice guidance.",
+              "China is broadly rolling out digital e-invoices, Vietnam mandated e-invoicing in 2022, Malaysia started full mandate in 2024, and Japan, Korea, Indonesia, Thailand, and others continue expanding compliance scope.",
           },
           {
-            titleZh: "新政推送与主动风控",
-            titleEn: "Policy Push and Proactive Risk Control",
+            titleZh: "美洲与中东非：实时清关与分阶段强制并行",
+            titleEn: "Americas, Middle East, and Africa: Clearance and Phased Mandates",
             descriptionZh:
-              "支持按行业、区域与业务场景定制推送规则，结合交易与税务数据识别潜在影响，推动企业从被动响应走向主动预判。",
+              "巴西、墨西哥、智利等拉美国家以本地平台实时清关为主；沙特 ZATCA 二期、阿联酋 2026 年 B2B 强制、埃及和尼日利亚等非洲市场也在推进全面强制。",
             descriptionEn:
-              "Delivers targeted alerts by industry, region, and scenario while combining transaction and tax data to identify emerging risks proactively.",
+              "Brazil, Mexico, Chile, and other Latin American markets rely on local clearance platforms, while Saudi ZATCA Phase 2, UAE 2026 B2B mandates, Egypt, Nigeria, and other African markets are moving toward full mandates.",
+          },
+          {
+            titleZh: "大洋洲：公共机构先行，企业端持续推广",
+            titleEn: "Oceania: Public Sector First, Business Adoption Expanding",
+            descriptionZh:
+              "澳大利亚、新西兰公共机构自 2022 年起强制，企业 B2B 侧以自愿推广和标准化网络连接为主，适合与集团共享服务逐步协同。",
+            descriptionEn:
+              "Australia and New Zealand mandated public-sector e-invoicing from 2022, while B2B adoption continues through voluntary rollout and standardized network connections.",
+          },
+        ],
+      },
+      {
+        sectionType: "policy-guidance",
+        titleZh: "越南政策辅导与关务税务协同",
+        titleEn: "Vietnam Policy Guidance and Customs-tax Coordination",
+        descriptionZh:
+          "结合政策辅导材料，补充越南企业类型、合规等级、通关后核查、发票清单与税务报告等要求，帮助出海企业把电子发票建设纳入关务、税务和内控一体化管理。",
+        descriptionEn:
+          "Adds Vietnam-focused policy guidance for enterprise types, compliance grading, post-clearance audit, invoice lists, and tax reporting so outbound businesses can manage e-invoicing together with customs, tax, and internal controls.",
+        imageUrl: "/ppt-slides/ppt-overseas/slide-021.png",
+        items: [
+          {
+            titleZh: "企业类型与适用边界",
+            titleEn: "Entity Types and Applicability",
+            descriptionZh:
+              "围绕越南本土企业、普通外资企业、保税/EPE 企业等类型，梳理不同主体在发票、税务、报关和资料留存上的管理边界，明确海外电子发票项目的适用范围。",
+            descriptionEn:
+              "Maps local entities, foreign-invested companies, and bonded or EPE entities to invoice, tax, declaration, and archive obligations so teams can define the e-invoicing rollout scope clearly.",
+          },
+          {
+            titleZh: "合规等级与通关后核查准备",
+            titleEn: "Compliance Grading and Post-clearance Audit Readiness",
+            descriptionZh:
+              "结合越南海关对企业合规等级的分类，以及通关后核查时限、人员、流程和资料清单，建立可追溯的发票、合同、报关、库存和财务资料闭环。",
+            descriptionEn:
+              "Aligns Vietnam customs compliance grading with post-clearance audit timelines, procedures, and document lists, creating traceable loops for invoices, contracts, declarations, inventory, and finance records.",
+          },
+          {
+            titleZh: "发票清单、税务报告与关务年报协同",
+            titleEn: "Invoice Lists, Tax Reports, and Customs Annual Reporting",
+            descriptionZh:
+              "将每月、季度含税发票清单、税务报告、料件收发存、成品收发存和单损耗报表纳入同一数据治理口径，支撑越南海关年报与税务申报协同。",
+            descriptionEn:
+              "Unifies monthly and quarterly VAT invoice lists, tax reports, material and finished-goods ledgers, and consumption reports under one data governance model for Vietnam customs annual reporting and tax filing.",
+          },
+          {
+            titleZh: "多语言系统对接与本地化运营",
+            titleEn: "Multilingual Integration and Localized Operations",
+            descriptionZh:
+              "支持越南语、中文、英文多语言操作与参数维护，并可对接本地海关/税务系统及企业 ERP，降低跨语言、跨系统操作造成的合规遗漏。",
+            descriptionEn:
+              "Supports Vietnamese, Chinese, and English operations, parameter maintenance, and integration with local customs or tax systems and enterprise ERP to reduce cross-language and cross-system compliance gaps.",
+          },
+        ],
+      },
+      {
+        sectionType: "automation",
+        titleZh: "AI 驱动的自动化开票与数据闭环",
+        titleEn: "AI-driven Invoicing Automation and Data Loop",
+        descriptionZh:
+          "围绕自动开票、智能校验、支付对账、数据治理和模板管理，构建从输入到税局传输的自动化作业链路。",
+        descriptionEn:
+          "Builds an automated operating chain from source intake to tax authority transmission across invoicing, validation, reconciliation, and template management.",
+        imageUrl: "/ppt-slides/ppt-overseas/slide-020.png",
+        items: [
+          {
+            titleZh: "自动化开票与智能校验",
+            titleEn: "Automated Invoicing and Smart Validation",
+            descriptionZh:
+              "支持 AI OCR 提取、税号与内容校验、多语言/多币种转换、自动匹配税率，并生成 XML/PDF 双语电子发票进行备案。",
+            descriptionEn:
+              "Supports AI OCR extraction, taxpayer/content validation, multilingual and multi-currency conversion, tax-rate matching, and XML/PDF bilingual invoice generation.",
+          },
+          {
+            titleZh: "全局数据治理与模板管理",
+            titleEn: "Unified Data Governance and Templates",
+            descriptionZh:
+              "通过全球涉税数据统一管理、自动化引擎与模板配置能力，统一对接 ERP/业务系统，降低跨组织、跨区域的口径差异。",
+            descriptionEn:
+              "Unifies ERP and business-system inputs with centralized tax data governance, automation engines, and template controls across entities and regions.",
+          },
+          {
+            titleZh: "支付、流转与多样化交付",
+            titleEn: "Payment, Routing, and Multi-channel Delivery",
+            descriptionZh:
+              "串联支付环节、票据流转与短信/邮件/Web 等交付渠道，并兼顾中小企业到大型集团的差异化业务形态。",
+            descriptionEn:
+              "Connects payment, invoice routing, and SMS, email, or web delivery while supporting scenarios from SMEs to large enterprise groups.",
+          },
+        ],
+      },
+      {
+        sectionType: "delivery",
+        titleZh: "平台落地、实施路径与五大保障",
+        titleEn: "Platform Delivery, Rollout Path, and Five Safeguards",
+        descriptionZh:
+          "结合平台页面、实施节奏和保障体系，形成“上线快、合规稳、服务持续”的海外电子发票交付方案。",
+        descriptionEn:
+          "Combines product screens, rollout sequencing, and safeguard mechanisms into a fast and resilient Vietnam e-invoicing delivery plan.",
+        imageUrl: "/ppt-slides/ppt-overseas/slide-030.png",
+        items: [
+          {
+            titleZh: "核心平台页面与业务闭环",
+            titleEn: "Core Screens and Business Closure",
+            descriptionZh:
+              "覆盖发票管理、发票开具、发票调整等核心页面，帮助本地团队快速上手并形成可视化运营闭环。",
+            descriptionEn:
+              "Covers invoice management, issuance, and adjustment screens so local teams can form a visible and controllable operating loop quickly.",
+          },
+          {
+            titleZh: "五大保障体系",
+            titleEn: "Five Safeguard System",
+            descriptionZh:
+              "通过组织、售后、成本、技术和人员五大保障体系，支撑项目从上线到长期运营的稳定性与透明度。",
+            descriptionEn:
+              "Provides organizational, support, cost, technical, and staffing safeguards for stable delivery from launch through long-term operations.",
+          },
+          {
+            titleZh: "实施路径与常态化服务",
+            titleEn: "Implementation Path and Ongoing Service",
+            descriptionZh:
+              "按照筹备期、试运期和常态化服务分阶段推进，覆盖税号申请、档案建立、试点开票、流程优化、实时风控与政策更新。",
+            descriptionEn:
+              "Moves from preparation to pilot and ongoing service with tax registration, archive setup, pilot invoicing, process optimization, live risk control, and policy updates.",
           },
         ],
       },
@@ -1233,8 +1389,8 @@ async function seedSite() {
       phone: "(0512)62880577",
       fax: "(0512)62880577",
       email: "service@sztaxs.com",
-      addressZh: "江苏省苏州市工业园区圆融大厦1709（圆融街）",
-      addressEn: "Room 1709, Yuanrong Building, SIP, Suzhou, Jiangsu, China",
+      addressZh: "江苏省苏州工业园区扬富路10号新建元数智湾D幢 305室",
+      addressEn: "Room 305, Building D, Xinjianyuan Digital Intelligence Bay, No. 10 Yangfu Road, Suzhou Industrial Park, Jiangsu, China",
       icpRecord: "苏ICP备18061422号-1",
       copyrightZh: "版权所有 苏州泰可思数据科技有限公司",
       copyrightEn: "Copyright © Suzhou Taxs Data Technology Co., Ltd.",
@@ -1280,8 +1436,8 @@ async function seedSite() {
       phone: "(0512)62880577",
       fax: "(0512)62880577",
       email: "service@sztaxs.com",
-      addressZh: "江苏省苏州市工业园区圆融大厦1709（圆融街）",
-      addressEn: "Room 1709, Yuanrong Building, SIP, Suzhou, Jiangsu, China",
+      addressZh: "江苏省苏州工业园区扬富路10号新建元数智湾D幢 305室",
+      addressEn: "Room 305, Building D, Xinjianyuan Digital Intelligence Bay, No. 10 Yangfu Road, Suzhou Industrial Park, Jiangsu, China",
       icpRecord: "苏ICP备18061422号-1",
       copyrightZh: "版权所有 苏州泰可思数据科技有限公司",
       copyrightEn: "Copyright © Suzhou Taxs Data Technology Co., Ltd.",
@@ -1334,32 +1490,53 @@ async function seedMenus() {
       sortOrder: 2,
     },
     {
+      menuKey: "ai-agent",
+      labelZh: "AI财税智能体",
+      labelEn: "AI Tax Agent",
+      path: "/ai-agent",
+      sortOrder: 3,
+    },
+    {
+      menuKey: "open-platform",
+      labelZh: "开放平台",
+      labelEn: "Open Platform",
+      path: "/open-platform",
+      sortOrder: 4,
+    },
+    {
+      menuKey: "short-videos",
+      labelZh: "视频介绍",
+      labelEn: "Video Introduction",
+      path: "/short-videos",
+      sortOrder: 5,
+    },
+    {
       menuKey: "solutions",
       labelZh: "解决方案",
       labelEn: "Solutions",
       path: "/solutions",
-      sortOrder: 3,
+      sortOrder: 6,
     },
     {
       menuKey: "news",
       labelZh: "新闻动态",
       labelEn: "News",
       path: "/news",
-      sortOrder: 4,
+      sortOrder: 7,
     },
     {
       menuKey: "about",
       labelZh: "关于我们",
       labelEn: "About",
       path: "/about",
-      sortOrder: 5,
+      sortOrder: 8,
     },
     {
       menuKey: "contact",
       labelZh: "联系我们",
       labelEn: "Contact",
       path: "/contact",
-      sortOrder: 6,
+      sortOrder: 9,
     },
   ];
 
@@ -1415,9 +1592,9 @@ async function seedPages() {
       summaryZh: "欢迎联系泰可思，获取产品演示、项目咨询与生态合作支持。",
       summaryEn: "Contact Taxs for product demos, project consultation, and ecosystem collaboration.",
       contentZh:
-        "服务热线：(0512)62880577\n邮箱：service@sztaxs.com\n地址：江苏省苏州市工业园区圆融大厦1709（圆融街）\n\n服务范围：\n1. 企业税务数字一体化平台咨询\n2. 乐企接入与申报能力建设\n3. 电子会计档案与出口退税解决方案",
+        "服务热线：(0512)62880577\n邮箱：service@sztaxs.com\n地址：江苏省苏州工业园区扬富路10号新建元数智湾D幢 305室\n\n服务范围：\n1. 企业税务数字一体化平台咨询\n2. 乐企接入与申报能力建设\n3. 电子会计档案与出口退税解决方案",
       contentEn:
-        "Hotline: (0512)62880577\nEmail: service@sztaxs.com\nAddress: Room 1709, Yuanrong Building, SIP, Suzhou, Jiangsu, China\n\nService Scope:\n1. Enterprise tax digital integration consulting\n2. Leqi access and filing capability enablement\n3. E-accounting archive and export tax rebate solutions",
+        "Hotline: (0512)62880577\nEmail: service@sztaxs.com\nAddress: Room 305, Building D, Xinjianyuan Digital Intelligence Bay, No. 10 Yangfu Road, Suzhou Industrial Park, Jiangsu, China\n\nService Scope:\n1. Enterprise tax digital integration consulting\n2. Leqi access and filing capability enablement\n3. E-accounting archive and export tax rebate solutions",
       publishStatus: PublishStatus.PUBLISHED,
       translationStatus: TranslationStatus.REVIEWED,
     },
@@ -1429,9 +1606,9 @@ async function seedPages() {
       summaryZh: "欢迎联系泰可思，获取产品演示、项目咨询与生态合作支持。",
       summaryEn: "Contact Taxs for product demos, project consultation, and ecosystem collaboration.",
       contentZh:
-        "服务热线：(0512)62880577\n邮箱：service@sztaxs.com\n地址：江苏省苏州市工业园区圆融大厦1709（圆融街）\n\n服务范围：\n1. 企业税务数字一体化平台咨询\n2. 乐企接入与申报能力建设\n3. 电子会计档案与出口退税解决方案",
+        "服务热线：(0512)62880577\n邮箱：service@sztaxs.com\n地址：江苏省苏州工业园区扬富路10号新建元数智湾D幢 305室\n\n服务范围：\n1. 企业税务数字一体化平台咨询\n2. 乐企接入与申报能力建设\n3. 电子会计档案与出口退税解决方案",
       contentEn:
-        "Hotline: (0512)62880577\nEmail: service@sztaxs.com\nAddress: Room 1709, Yuanrong Building, SIP, Suzhou, Jiangsu, China\n\nService Scope:\n1. Enterprise tax digital integration consulting\n2. Leqi access and filing capability enablement\n3. E-accounting archive and export tax rebate solutions",
+        "Hotline: (0512)62880577\nEmail: service@sztaxs.com\nAddress: Room 305, Building D, Xinjianyuan Digital Intelligence Bay, No. 10 Yangfu Road, Suzhou Industrial Park, Jiangsu, China\n\nService Scope:\n1. Enterprise tax digital integration consulting\n2. Leqi access and filing capability enablement\n3. E-accounting archive and export tax rebate solutions",
       publishStatus: PublishStatus.PUBLISHED,
       translationStatus: TranslationStatus.REVIEWED,
     },
@@ -1794,9 +1971,9 @@ async function seedProducts() {
       slug: "specialized-business-modules",
       nameZh: "专项业务平台",
       nameEn: "Specialized Business Modules",
-      descriptionZh: "聚焦电子会计档案、出口退税与海外税务合规等高复杂财税场景，提供专项治理能力。",
+      descriptionZh: "聚焦电子会计档案、出口退税与海外电子发票等高复杂财税场景，提供专项治理能力。",
       descriptionEn:
-        "Focused modules for high-complexity tax scenarios including e-accounting archives, export tax rebates, and overseas tax compliance.",
+        "Focused modules for high-complexity tax scenarios including e-accounting archives, export tax rebates, and Vietnam e-invoicing.",
       products: [
         {
           slug: "electronic-accounting-archive",
@@ -1904,54 +2081,226 @@ async function seedProducts() {
         },
         {
           slug: "global-tax-intelligence-platform",
-          nameZh: "海外全球税务数智化平台",
-          nameEn: "Global Tax Intelligence Platform",
-          summaryZh: "面向跨国与出海企业，提供全球间接税、直接税与政策知识库一体化能力。",
+          nameZh: "海外电子发票解决方案",
+          nameEn: "Overseas E-invoicing Solution",
+          summaryZh: "面向在海外投资与出海企业，提供海外电子发票法规梳理、自动化开票与持续运营一体化方案。",
           summaryEn:
-            "An integrated platform for multinational businesses covering global indirect tax, direct tax, and policy intelligence.",
+            "An integrated overseas e-invoicing solution covering country rollout, automated invoicing, and ongoing operations for multinational businesses.",
           sections: [
             {
-              sectionType: "indirect-tax",
-              titleZh: "全球间接税与电票管理",
-              titleEn: "Global Indirect Tax and E-invoice",
-              descriptionZh: "覆盖跨境开票、智能计税、汇率换算、AI识别与票据归档。",
+              sectionType: "market",
+              titleZh: "海外电子发票制度与实施要点",
+              titleEn: "Overseas E-invoicing Rules",
+              descriptionZh: "覆盖纳税人范围、开票方式、发票类型、时间要求与异常处理机制。",
               descriptionEn:
-                "Covers cross-border invoicing, intelligent tax calculation, FX conversion, AI extraction, and archiving.",
+                "Covers taxpayer scope, issuance methods, invoice types, timing requirements, and exception handling.",
               items: [
                 {
-                  descriptionZh: "支持多国家/地区开票规则适配与跨境电票流转。",
+                  descriptionZh: "帮助项目团队快速完成法规理解与本地规则梳理，降低上线前的合规不确定性。",
                   descriptionEn:
-                    "Supports multi-jurisdiction invoicing rules and cross-border e-invoice circulation.",
+                    "Helps teams clarify local rules quickly before go-live and reduce regulatory uncertainty.",
                 },
               ],
             },
             {
-              sectionType: "direct-tax",
-              titleZh: "全球直接税合规与核算",
-              titleEn: "Global Direct Tax Compliance",
-              descriptionZh: "围绕企业所得税、预提税、税收协定与专项风险构建自动化作业闭环。",
+              sectionType: "automation",
+              titleZh: "AI 驱动的自动化开票与校验",
+              titleEn: "AI-driven Invoicing Automation",
+              descriptionZh: "围绕 OCR、校验、税率匹配、XML/PDF 输出与多渠道交付构建自动化作业链路。",
               descriptionEn:
-                "Builds an automated workflow for CIT, withholding tax, treaty application, and special tax risks.",
+                "Builds an automated flow for OCR, validation, tax-rate matching, XML/PDF output, and multi-channel delivery.",
               items: [
                 {
-                  descriptionZh: "支持税基核算、申报底稿生成、申报流转与审计留痕。",
+                  descriptionZh: "支持从输入、智能处理到税局传输的自动化闭环，兼顾多币种、多语言与多业务形态。",
                   descriptionEn:
-                    "Supports tax-base calculation, filing drafts, workflow routing, and audit traceability.",
+                    "Supports an automated loop from source intake to authority submission across currencies, languages, and business models.",
                 },
               ],
             },
             {
-              sectionType: "knowledge-base",
-              titleZh: "全球财税知识库",
-              titleEn: "Global Tax Knowledge Base",
-              descriptionZh: "通过自动采集、多语言检索与新政推送支撑全球政策响应。",
+              sectionType: "delivery",
+              titleZh: "实施路径与五大保障",
+              titleEn: "Implementation and Safeguards",
+              descriptionZh: "通过平台页面、五大保障体系与分阶段实施路径保障项目快速落地与长期稳定运行。",
               descriptionEn:
-                "Supports global policy response through automated collection, multilingual search, and policy alerts.",
+                "Ensures rapid go-live and steady long-term operations through platform screens, five safeguards, and phased rollout planning.",
               items: [
                 {
-                  descriptionZh: "支持全球政策分钟级感知与主动风控提示。",
+                  descriptionZh: "覆盖筹备期、试运期与常态化服务，并由组织、售后、成本、技术和人员保障体系持续支撑。",
                   descriptionEn:
-                    "Enables minute-level policy awareness and proactive risk notifications.",
+                    "Covers preparation, pilot, and ongoing service with organizational, support, cost, technical, and staffing safeguards.",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      slug: "electronic-receipt-system",
+      nameZh: "电子收据系统",
+      nameEn: "Electronic Receipt System",
+      descriptionZh: "覆盖收据开具、批量导入、查询统计、CA签章、邮件通知、扫码验真与审计留痕。",
+      descriptionEn:
+        "Covers receipt issuance, batch import, query analytics, CA sealing, email notification, QR verification, and audit trails.",
+      iconUrl: "/receipt-system/receipt-manual-issue.png",
+      products: [
+        {
+          slug: "electronic-receipt-system",
+          nameZh: "云票通电子收据管理系统",
+          nameEn: "YPT Electronic Receipt Management System",
+          summaryZh:
+            "面向物业、租赁、园区与收费服务场景，提供手工填开、批量开具、CA电子签章、已开查询、统计汇总、通知补发与公开验真的电子收据全流程管理。",
+          summaryEn:
+            "Designed for property, leasing, park operations, and fee-collection scenarios, providing full-cycle electronic receipt management across manual issuance, batch issuance, CA e-sealing, issued receipt query, statistics, notification resend, and public verification.",
+          bannerUrl: "/receipt-system/receipt-manual-issue.png",
+          galleryImages: [
+            "/receipt-system/receipt-manual-issue.png",
+            "/receipt-system/receipt-statistics.png",
+            "/receipt-system/receipt-notifications.png",
+          ],
+          sections: [
+            {
+              sectionType: "issue",
+              titleZh: "所见即所得收据开具",
+              titleEn: "WYSIWYG Receipt Issuance",
+              descriptionZh:
+                "按开具场景自动带出模板、印章与号段，支持交款单位、收款项目、付款方式和金额的票据式填开，并在开具成功后自动完成 CA 电子签章。",
+              descriptionEn:
+                "Automatically loads templates, seals, and number ranges by issuance scenario, supports receipt-style entry of payer, item, payment method, and amount, and completes CA e-sealing after issuance.",
+              imageUrl: "/receipt-system/receipt-manual-issue.png",
+              items: [
+                {
+                  titleZh: "客户与费项双击带入",
+                  titleEn: "Double-click Customer and Item Fill",
+                  descriptionZh:
+                    "交款单位可从客户档案中双击选择，收款项目和交款方式可从常规设置中快速选入，减少手工录入错误。",
+                  descriptionEn:
+                    "Payers can be selected from customer records, while receipt items and payment methods can be filled from common settings to reduce manual errors.",
+                },
+                {
+                  titleZh: "金额大写与票号自动生成",
+                  titleEn: "Auto Amount-in-words and Receipt Number",
+                  descriptionZh:
+                    "填写数字金额后自动生成中文大写和逐格金额，票面编号按号段规则自动生成并发控制，避免重号。",
+                  descriptionEn:
+                    "Numeric amounts are converted into Chinese uppercase and digit slots automatically, while receipt numbers are generated with concurrency control.",
+                },
+                {
+                  titleZh: "批量导入与批量签章",
+                  titleEn: "Batch Import and Sealing",
+                  descriptionZh:
+                    "支持下载 Excel 模板、表格导入待开列表、核对后批量开具并签章，适合大批量收费场景。",
+                  descriptionEn:
+                    "Supports Excel template download, batch import into pending lists, and batch issuance with e-sealing after review.",
+                },
+              ],
+            },
+            {
+              sectionType: "query",
+              titleZh: "已开查询、统计与对账",
+              titleEn: "Issued Query, Analytics, and Reconciliation",
+              descriptionZh:
+                "支持按交款单位、费项、收据号、状态、复核状态和开具日期检索，并提供下载、批量打印、导出明细、对账单和统计汇总能力。",
+              descriptionEn:
+                "Supports search by payer, item, receipt number, status, review status, and issuance date, with download, batch print, detail export, statements, and statistics.",
+              imageUrl: "/receipt-system/receipt-statistics.png",
+              items: [
+                {
+                  titleZh: "收据状态闭环管理",
+                  titleEn: "Closed-loop Receipt Status Management",
+                  descriptionZh:
+                    "覆盖已开具、已作废、冲抵、退款等状态，作废、红冲、退款等高风险操作均要求原因并写入审计日志。",
+                  descriptionEn:
+                    "Covers issued, voided, offset, and refunded statuses; high-risk actions require reasons and are written into audit logs.",
+                },
+                {
+                  titleZh: "统计汇总与图表分析",
+                  titleEn: "Statistics and Chart Analytics",
+                  descriptionZh:
+                    "按月统计开具总量、正常、作废、冲抵、退款的张数与金额，支持数量/金额口径切换和 Excel 导出。",
+                  descriptionEn:
+                    "Monthly statistics cover total, normal, voided, offset, and refunded receipts by count and amount, with count/amount switching and Excel export.",
+                },
+                {
+                  titleZh: "账期对账单",
+                  titleEn: "Accounting-period Statements",
+                  descriptionZh:
+                    "支持设置每月账单日，按账期汇总有效收款张数、收款合计、退款合计与实收净额。",
+                  descriptionEn:
+                    "Supports monthly billing-day setup and aggregates valid receipt count, receipt amount, refund amount, and net received amount by period.",
+                },
+              ],
+            },
+            {
+              sectionType: "setting",
+              titleZh: "模板、印章、号段与通知配置",
+              titleEn: "Template, Seal, Number Range, and Notification Settings",
+              descriptionZh:
+                "通过开具场景把收据模板、电子印章、收据号段和邮件通知开关绑定成可复用配置，支持企业管理员集中维护。",
+              descriptionEn:
+                "Issuance scenarios bind templates, e-seals, number ranges, and notification switches into reusable configurations managed by enterprise admins.",
+              imageUrl: "/receipt-system/receipt-notifications.png",
+              items: [
+                {
+                  titleZh: "收据模板与样式预览",
+                  titleEn: "Receipt Template and Preview",
+                  descriptionZh:
+                    "支持配置票面标题、企业抬头、验真二维码、印章位置、字段显示、排序和标签改名，并生成样例 PDF 预览。",
+                  descriptionEn:
+                    "Supports title, company header, QR verification code, seal position, field display, sorting, relabeling, and sample PDF preview.",
+                },
+                {
+                  titleZh: "电子印章到期预警",
+                  titleEn: "E-seal Expiry Warning",
+                  descriptionZh:
+                    "维护 CA 服务商、证书序列号、状态和到期时间，印章到期前 30 天在首页和填开页自动预警。",
+                  descriptionEn:
+                    "Maintains CA provider, certificate serial number, status, and expiry date; warnings appear 30 days before expiry.",
+                },
+                {
+                  titleZh: "邮件通知与补发",
+                  titleEn: "Email Notification and Resend",
+                  descriptionZh:
+                    "支持系统默认邮箱或企业自定义 SMTP，通知异步发送，不影响开具速度，失败记录可查看原因并补发。",
+                  descriptionEn:
+                    "Supports system default email or enterprise SMTP, sends asynchronously without slowing issuance, and allows failed notifications to be diagnosed and resent.",
+                },
+              ],
+            },
+            {
+              sectionType: "receipt-governance",
+              titleZh: "多企业隔离、扫码验真与审计留痕",
+              titleEn: "Multi-entity Isolation, QR Verification, and Audit Trails",
+              descriptionZh:
+                "以部门作为企业维度隔离收据、客户、模板等数据，并提供公开扫码验真、企业角色权限、业务审计日志和系统操作日志。",
+              descriptionEn:
+                "Uses department as the enterprise dimension to isolate receipts, customers, and templates, with public QR verification, role permissions, business audit logs, and system operation logs.",
+              imageUrl: "/receipt-system/receipt-manual-issue.png",
+              items: [
+                {
+                  titleZh: "公开扫码验真",
+                  titleEn: "Public QR Verification",
+                  descriptionZh:
+                    "收据 PDF 上的二维码可直接打开公开验真页，展示收据号、交款单位、金额、开票人、日期和状态等摘要信息。",
+                  descriptionEn:
+                    "The QR code on the receipt PDF opens a public verification page showing receipt number, payer, amount, issuer, date, and status.",
+                },
+                {
+                  titleZh: "企业管理员与开票员分权",
+                  titleEn: "Admin and Biller Role Separation",
+                  descriptionZh:
+                    "企业管理员可维护全部开具设置，开票员可开具、查询、统计和维护客户，但不可修改模板、印章、号段和场景。",
+                  descriptionEn:
+                    "Enterprise admins manage all issuance settings, while billers can issue, query, analyze, and maintain customers without changing templates, seals, number ranges, or scenarios.",
+                },
+                {
+                  titleZh: "全链路审计",
+                  titleEn: "Full-chain Auditability",
+                  descriptionZh:
+                    "作废、冲抵、退款、批量审核、配置变更等关键动作记录操作人、对象、变更前后值与时间，便于追溯。",
+                  descriptionEn:
+                    "Key actions such as voiding, offsetting, refunds, batch review, and setting changes record operator, object, before/after values, and timestamp.",
                 },
               ],
             },
@@ -2055,6 +2404,7 @@ async function seedProducts() {
         nameEn: category.nameEn,
         descriptionZh: category.descriptionZh,
         descriptionEn: category.descriptionEn,
+        iconUrl: category.iconUrl ?? null,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         translationStatus: TranslationStatus.REVIEWED,
@@ -2065,6 +2415,7 @@ async function seedProducts() {
         nameEn: category.nameEn,
         descriptionZh: category.descriptionZh,
         descriptionEn: category.descriptionEn,
+        iconUrl: category.iconUrl ?? null,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         translationStatus: TranslationStatus.REVIEWED,
@@ -2080,7 +2431,7 @@ async function seedProducts() {
 async function seedSolutions() {
   await prisma.solution.deleteMany();
 
-  const solutions = [
+  const solutions: SolutionSeed[] = [
     {
       slug: "group-tax-digitalization",
       titleZh: "集团企业税务数字一体化方案",
@@ -2158,6 +2509,97 @@ async function seedSolutions() {
           descriptionZh: "支持乐企与RPA双通道切换，保障高峰期持续稳定开票。",
           descriptionEn:
             "Ensures continuity through seamless switching between Leqi and RPA channels during peak periods.",
+        },
+      ],
+    },
+    {
+      slug: "leqi-joint-use-solution",
+      titleZh: "农商行乐企联用解决方案",
+      titleEn: "Rural Bank Leqi Joint-use Solution",
+      summaryZh:
+        "面向农商行、支付机构与区域高频消费场景，建设乐企联用平台，落地支付即开票、交易即开票与税银数据协同。",
+      summaryEn:
+        "Builds a Leqi joint-use platform for rural banks, payment institutions, and high-frequency local scenarios, enabling payment-triggered invoicing, transaction-triggered invoicing, and bank-tax data collaboration.",
+      coverUrl: "/solutions/leqi-joint-use-banking.svg",
+      painPoints: [
+        {
+          titleZh: "政策窗口期有限",
+          titleEn: "Limited Policy Window",
+          descriptionZh:
+            "乐企联用从试点走向行业推广，银行、支付、加油站、停车、物业等场景正在快速扩围，区域机构需要尽早完成资质和平台建设。",
+          descriptionEn:
+            "Leqi joint-use is moving from pilots to broader industry rollout across banks, payment, gas stations, parking, and property scenarios, requiring early qualification and platform readiness.",
+        },
+        {
+          titleZh: "中小商户直连接入成本高",
+          titleEn: "High Direct-access Cost for SMEs",
+          descriptionZh:
+            "中小商户具备直连开票需求，但自建乐企能力投入高、周期长、运维难，难以覆盖多行业和高峰交易。",
+          descriptionEn:
+            "SMEs need direct invoicing capability, but self-built Leqi access is costly, slow, and hard to maintain across industries and peak transactions.",
+        },
+        {
+          titleZh: "交易、开票与金融服务割裂",
+          titleEn: "Separated Transaction, Invoice, and Finance",
+          descriptionZh:
+            "银行掌握支付与客户触点，但交易流水、发票数据和场景金融未形成闭环，难以沉淀真实经营数据。",
+          descriptionEn:
+            "Banks own payment and customer touchpoints, but transaction flows, invoice data, and scenario finance are often disconnected, limiting real operating-data assets.",
+        },
+      ],
+      advantages: [
+        {
+          titleZh: "1.5个月快速建设上线",
+          titleEn: "1.5-month Fast Launch",
+          descriptionZh:
+            "基于成熟乐企联用平台与实施方法，协助完成资质申请、仿真测试、能力开通和白名单客户上线。",
+          descriptionEn:
+            "Uses a proven Leqi joint-use platform and delivery method to support qualification, simulation testing, capability activation, and whitelisted customer onboarding.",
+        },
+        {
+          titleZh: "支付即开票与交易即开票闭环",
+          titleEn: "Payment and Transaction Invoicing Loop",
+          descriptionZh:
+            "对接网银、手机银行、收单、POS、小程序和行业系统，实现订单、支付、开票申请、发票回传与版式文件交付。",
+          descriptionEn:
+            "Connects online banking, mobile banking, acquiring, POS, mini-programs, and industry systems to complete order, payment, invoicing request, callback, and invoice-file delivery.",
+        },
+        {
+          titleZh: "税银协同与数据资产沉淀",
+          titleEn: "Bank-tax Collaboration and Data Assets",
+          descriptionZh:
+            "汇聚区域真实交易和发票数据，形成客户分层、精准授信、贷后监控、合规治理与场景金融服务能力。",
+          descriptionEn:
+            "Aggregates real regional transaction and invoice data to support customer segmentation, credit underwriting, post-loan monitoring, compliance governance, and scenario finance.",
+        },
+      ],
+      architectures: [
+        {
+          titleZh: "乐企联用平台总体架构",
+          titleEn: "Leqi Joint-use Platform Architecture",
+          descriptionZh:
+            "以银行/商城、网银/手机银行、收单 POS、小程序公众号和行业系统为入口，统一接入乐企服务平台与发票管理平台。",
+          descriptionEn:
+            "Uses bank mall, online/mobile banking, acquiring POS, mini-programs, public accounts, and industry systems as entry points into a unified Leqi service and invoice management platform.",
+          imageUrl: "/solutions/leqi-joint-use-banking.svg",
+        },
+        {
+          titleZh: "支付即开票业务流程",
+          titleEn: "Payment-triggered Invoicing Flow",
+          descriptionZh:
+            "支付完成后自动获取订单和收单信息，发起蓝票或红票申请，经乐企通道开具并回传发票信息与版式文件。",
+          descriptionEn:
+            "After payment, order and acquiring data are captured automatically, blue/red invoice requests are initiated, and invoice data plus formatted files are returned through the Leqi channel.",
+          imageUrl: "/solutions/leqi-joint-use-banking.svg",
+        },
+        {
+          titleZh: "区域场景推广路径",
+          titleEn: "Regional Scenario Rollout Path",
+          descriptionZh:
+            "优先覆盖餐饮住宿、加油站、停车场、物业、文旅、农产品收购、再生资源回收等高频交易行业。",
+          descriptionEn:
+            "Prioritizes high-frequency scenarios such as catering, accommodation, gas stations, parking, property services, culture and tourism, agricultural procurement, and recycling.",
+          imageUrl: "/solutions/leqi-joint-use-banking.svg",
         },
       ],
     },
@@ -2279,6 +2721,7 @@ async function seedSolutions() {
         titleEn: solution.titleEn,
         summaryZh: solution.summaryZh,
         summaryEn: solution.summaryEn,
+        coverUrl: solution.coverUrl ?? null,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         translationStatus: TranslationStatus.REVIEWED,
@@ -2289,6 +2732,7 @@ async function seedSolutions() {
         titleEn: solution.titleEn,
         summaryZh: solution.summaryZh,
         summaryEn: solution.summaryEn,
+        coverUrl: solution.coverUrl ?? null,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         translationStatus: TranslationStatus.REVIEWED,
@@ -2321,25 +2765,38 @@ async function seedSolutions() {
     });
 
     await prisma.solutionArchitectureBlock.deleteMany({ where: { solutionId: record.id } });
-    await prisma.solutionArchitectureBlock.create({
-      data: {
+    const architectures =
+      solution.architectures && solution.architectures.length > 0
+        ? solution.architectures
+        : [
+            {
+              titleZh: `${solution.titleZh} 架构图`,
+              titleEn: `${solution.titleEn} Architecture`,
+              descriptionZh: "可在后台上传架构图并扩展说明。",
+              descriptionEn: "Upload architecture diagrams and extend descriptions in admin panel.",
+            },
+          ];
+
+    await prisma.solutionArchitectureBlock.createMany({
+      data: architectures.map((item, index) => ({
         solutionId: record.id,
-        titleZh: `${solution.titleZh} 架构图`,
-        titleEn: `${solution.titleEn} Architecture`,
-        descriptionZh: "可在后台上传架构图并扩展说明。",
-        descriptionEn: "Upload architecture diagrams and extend descriptions in admin panel.",
-        sortOrder: 0,
-      },
+        titleZh: item.titleZh,
+        titleEn: item.titleEn,
+        descriptionZh: item.descriptionZh,
+        descriptionEn: item.descriptionEn,
+        imageUrl: item.imageUrl ?? null,
+        sortOrder: index,
+      })),
     });
   }
 }
 
 async function seedNews() {
-  await prisma.newsPost.deleteMany();
 
   const items = [
     {
       slug: "yunpiaotong-generative-upgrade",
+      newsCategory: NewsCategory.COMPANY,
       titleZh: "云票通生成式低代码底座发布新版本",
       titleEn: "YPT Generative Low-code Core Upgrade",
       summaryZh: "新增逻辑编排、报表配置与接口治理能力，提升复杂场景交付效率。",
@@ -2353,6 +2810,7 @@ async function seedNews() {
     },
     {
       slug: "national-filing-paas-capability",
+      newsCategory: NewsCategory.COMPANY,
       titleZh: "全国申报PaaS能力升级，覆盖36税区申报链路",
       titleEn: "National Filing PaaS Expanded to 36 Regions",
       summaryZh: "支持18个实体税种及10+附加税费种，兼容乐企与电子税局双路径申报。",
@@ -2366,6 +2824,7 @@ async function seedNews() {
     },
     {
       slug: "archive-and-export-solution-launch",
+      newsCategory: NewsCategory.INDUSTRY,
       titleZh: "电子会计档案与出口退税专项方案发布",
       titleEn: "Launch of E-archive and Export Rebate Solutions",
       summaryZh: "聚焦档案合规与退税效率，形成专项业务端到端能力体系。",
@@ -2381,9 +2840,23 @@ async function seedNews() {
 
   for (let i = 0; i < items.length; i += 1) {
     const item = items[i];
-    await prisma.newsPost.create({
-      data: {
+    await prisma.newsPost.upsert({
+      where: { slug: item.slug },
+      update: {
+        newsCategory: item.newsCategory,
+        titleZh: item.titleZh,
+        titleEn: item.titleEn,
+        summaryZh: item.summaryZh,
+        summaryEn: item.summaryEn,
+        contentZh: item.contentZh,
+        contentEn: item.contentEn,
+        publishStatus: PublishStatus.PUBLISHED,
+        sortOrder: i,
+        publishedAt: new Date(item.publishedAt),
+      },
+      create: {
         slug: item.slug,
+        newsCategory: item.newsCategory,
         titleZh: item.titleZh,
         titleEn: item.titleEn,
         summaryZh: item.summaryZh,
@@ -2415,6 +2888,51 @@ async function seedSeoMeta() {
       description:
         "Taxs delivers enterprise tax capabilities including YPT platform, Leqi integration, filing automation, IIT filing, risk governance, e-archive, and export rebate.",
       keywords: "Taxs,YPT,Leqi integration,tax filing,IIT filing,e-archive,export rebate",
+    },
+    {
+      pageKey: "ai-agent",
+      locale: "zh",
+      title: "AI财税智能体 | 泰可思数科",
+      description: "覆盖全球票据处理、智能申报、税务顾问与跨境合规治理的一体化 AI 财税服务栏目。",
+      keywords: "AI财税智能体,跨境税务,智能申报,税务顾问,票据处理",
+    },
+    {
+      pageKey: "ai-agent",
+      locale: "en",
+      title: "AI Tax Agent | Taxs",
+      description:
+        "An integrated AI tax section for global invoice processing, intelligent filing, tax advisory, and cross-border compliance governance.",
+      keywords: "AI tax agent,global tax filing,tax advisory,invoice automation,compliance governance",
+    },
+    {
+      pageKey: "open-platform",
+      locale: "zh",
+      title: "开放平台 | 泰可思数科",
+      description: "泰可思开放平台预置销项开票、进项管理、个税管理、申报管理、乐企接入、发票查验、OCR、财政票据与税务风险管理等 API 能力。",
+      keywords: "泰可思开放平台,API接口,销项开票,进项管理,乐企接入,发票查验,发票OCR,税务风险管理",
+    },
+    {
+      pageKey: "open-platform",
+      locale: "en",
+      title: "Open Platform | Taxs",
+      description:
+        "Taxs Open Platform presets APIs for output invoicing, input management, IIT, filing, Leqi integration, invoice verification, OCR, fiscal bills, and tax risk management.",
+      keywords: "Taxs open platform,API,invoicing,input invoice,Leqi integration,invoice OCR,tax risk management",
+    },
+    {
+      pageKey: "short-videos",
+      locale: "zh",
+      title: "视频介绍 | 泰可思数科",
+      description: "泰可思短视频栏目，集中展示财税数字化、云票通、乐企接入、票据风控与 AI 财税智能体内容。",
+      keywords: "泰可思短视频,财税短视频,云票通,乐企接入,AI财税智能体,票据风控",
+    },
+    {
+      pageKey: "short-videos",
+      locale: "en",
+      title: "Video Introduction | Taxs",
+      description:
+        "Taxs short video gallery for digital tax, YPT, Leqi integration, invoice risk control, and AI tax agent scenarios.",
+      keywords: "Taxs short videos,digital tax,YPT,Leqi integration,AI tax agent,invoice risk",
     },
   ];
 

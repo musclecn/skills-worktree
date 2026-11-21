@@ -24,7 +24,7 @@ const outputRoot = path.join(repoRoot, "public", "ppt-slides");
 
 const DECK_SOURCES = {
   "ppt2025": "/Users/musclecn/Documents/work/TAX/泰可思数科公司财税服务产品及能力介绍（2025详细版05）.pptx",
-  "ppt-overseas": "/Users/musclecn/Desktop/新增海外.pptx",
+  "ppt-overseas": "/Users/musclecn/Desktop/越南电子发票解决方案-20260306(1)(2).pptx",
 };
 
 const MIME_TYPES = {

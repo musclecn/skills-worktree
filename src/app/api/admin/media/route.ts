@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   const filePath = path.join(uploadDir, fileName);
   await writeFile(filePath, buffer);
 
-  const url = `/uploads/${fileName}`;
+  const url = `/api/public/media/${fileName}`;
   const asset = await prisma.mediaAsset.create({
     data: {
       fileName,

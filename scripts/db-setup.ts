@@ -83,6 +83,117 @@ function ensureSchema(databaseUrl: string) {
       db.exec(`ALTER TABLE "ProductSection" ADD COLUMN "imageUrl" TEXT`);
       console.log(`Added column ProductSection.imageUrl`);
     }
+
+    const newsColumns = db.prepare(`PRAGMA table_info("NewsPost")`).all() as { name: string }[];
+    const newsColumnSet = new Set(newsColumns.map((item) => item.name));
+    if (!newsColumnSet.has("newsCategory")) {
+      db.exec(`ALTER TABLE "NewsPost" ADD COLUMN "newsCategory" TEXT NOT NULL DEFAULT 'COMPANY'`);
+      console.log(`Added column NewsPost.newsCategory`);
+    }
+    if (!newsColumnSet.has("sourceName")) {
+      db.exec(`ALTER TABLE "NewsPost" ADD COLUMN "sourceName" TEXT`);
+      console.log(`Added column NewsPost.sourceName`);
+    }
+    if (!newsColumnSet.has("sourceUrl")) {
+      db.exec(`ALTER TABLE "NewsPost" ADD COLUMN "sourceUrl" TEXT`);
+      console.log(`Added column NewsPost.sourceUrl`);
+    }
+    if (!newsColumnSet.has("externalId")) {
+      db.exec(`ALTER TABLE "NewsPost" ADD COLUMN "externalId" TEXT`);
+      console.log(`Added column NewsPost.externalId`);
+    }
+
+    const appointmentTable = db
+      .prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'AppointmentRequest'`)
+      .get() as { name?: string } | undefined;
+
+    if (!appointmentTable?.name) {
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS "AppointmentRequest" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "companyName" TEXT NOT NULL,
+          "contactName" TEXT NOT NULL,
+          "contactInfo" TEXT NOT NULL,
+          "sourcePage" TEXT,
+          "notes" TEXT,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" DATETIME NOT NULL
+        )
+      `);
+      console.log(`Created table AppointmentRequest`);
+    }
+
+    const appointmentColumns = db
+      .prepare(`PRAGMA table_info("AppointmentRequest")`)
+      .all() as { name: string }[];
+    const appointmentColumnSet = new Set(appointmentColumns.map((item) => item.name));
+    if (!appointmentColumnSet.has("sourcePage")) {
+      db.exec(`ALTER TABLE "AppointmentRequest" ADD COLUMN "sourcePage" TEXT`);
+      console.log(`Added column AppointmentRequest.sourcePage`);
+    }
+    if (!appointmentColumnSet.has("notes")) {
+      db.exec(`ALTER TABLE "AppointmentRequest" ADD COLUMN "notes" TEXT`);
+      console.log(`Added column AppointmentRequest.notes`);
+    }
+
+    // 来源链路、防护与人工复核字段（已有数据不受影响，复核状态默认为待核）
+    const appointmentExtraColumns: [string, string][] = [
+      ["topic", "TEXT"],
+      ["locale", "TEXT"],
+      ["sessionId", "TEXT"],
+      ["landingPath", "TEXT"],
+      ["referrerHost", "TEXT"],
+      ["utmSource", "TEXT"],
+      ["utmMedium", "TEXT"],
+      ["utmCampaign", "TEXT"],
+      ["prevPath", "TEXT"],
+      ["articleSlug", "TEXT"],
+      ["productPath", "TEXT"],
+      ["entryId", "TEXT"],
+      ["submissionId", "TEXT"],
+      ["ipHash", "TEXT"],
+      ["deviceClass", "TEXT"],
+      ["contactKey", "TEXT"],
+      ["reviewStatus", "TEXT NOT NULL DEFAULT 'PENDING'"],
+      ["anomalyFlags", "TEXT"],
+      ["reviewedAt", "DATETIME"],
+    ];
+    for (const [column, definition] of appointmentExtraColumns) {
+      if (appointmentColumnSet.has(column)) continue;
+      db.exec(`ALTER TABLE "AppointmentRequest" ADD COLUMN "${column}" ${definition}`);
+      console.log(`Added column AppointmentRequest.${column}`);
+    }
+    db.exec(`
+      CREATE UNIQUE INDEX IF NOT EXISTS "AppointmentRequest_submissionId_key" ON "AppointmentRequest"("submissionId");
+      CREATE INDEX IF NOT EXISTS "AppointmentRequest_createdAt_idx" ON "AppointmentRequest"("createdAt");
+      CREATE INDEX IF NOT EXISTS "AppointmentRequest_contactKey_createdAt_idx" ON "AppointmentRequest"("contactKey", "createdAt");
+      CREATE INDEX IF NOT EXISTS "AppointmentRequest_ipHash_createdAt_idx" ON "AppointmentRequest"("ipHash", "createdAt");
+    `);
+
+    for (const column of ["relatedPath", "relatedLabelZh", "relatedLabelEn"]) {
+      if (newsColumnSet.has(column)) continue;
+      db.exec(`ALTER TABLE "NewsPost" ADD COLUMN "${column}" TEXT`);
+      console.log(`Added column NewsPost.${column}`);
+    }
+
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS "SiteEvent" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "sessionId" TEXT NOT NULL,
+        "type" TEXT NOT NULL,
+        "path" TEXT NOT NULL,
+        "locale" TEXT NOT NULL,
+        "target" TEXT,
+        "entryId" TEXT,
+        "articleSlug" TEXT,
+        "device" TEXT,
+        "referrerHost" TEXT
+      );
+      CREATE INDEX IF NOT EXISTS "SiteEvent_createdAt_idx" ON "SiteEvent"("createdAt");
+      CREATE INDEX IF NOT EXISTS "SiteEvent_type_createdAt_idx" ON "SiteEvent"("type", "createdAt");
+      CREATE INDEX IF NOT EXISTS "SiteEvent_sessionId_idx" ON "SiteEvent"("sessionId");
+    `);
   } finally {
     db.close();
   }

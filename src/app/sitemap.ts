@@ -3,6 +3,8 @@ import { PublishStatus } from "@prisma/client";
 import { localizePath } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 const FALLBACK_BASE_URL = "http://localhost:3000";
 
 function getSiteBaseUrl() {
@@ -32,7 +34,18 @@ function createEntry(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["/", "/about", "/contact", "/products", "/solutions", "/news"];
+  const staticPaths = [
+    "/",
+    "/about",
+    "/contact",
+    "/products",
+    "/solutions",
+    "/ai-agent",
+    "/ai-agent/cases/digital-tax-employee",
+    "/open-platform",
+    "/short-videos",
+    "/news",
+  ];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.flatMap((path) => [
     createEntry(
       toAbsoluteUrl(localizePath("zh", path)),
@@ -47,6 +60,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path === "/" ? 0.9 : 0.7,
     ),
   ]);
+
+  // 产品页仅英文，法律页面提供中英文版本。
+  const englishOnlyEntries: MetadataRoute.Sitemap = ["/export-sales-reconciliation", "/privacy", "/terms"].map((path) =>
+    createEntry(toAbsoluteUrl(localizePath("en", path)), new Date(), "monthly", 0.6),
+  );
+
+  const chineseLegalEntries: MetadataRoute.Sitemap = ["/privacy", "/terms"].map((path) =>
+    createEntry(toAbsoluteUrl(path), new Date(), "monthly", 0.6),
+  );
 
   const [products, solutions, news] = await Promise.all([
     prisma.product.findMany({
@@ -91,5 +113,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]),
   ];
 
-  return [...staticEntries, ...detailEntries];
+  return [...staticEntries, ...englishOnlyEntries, ...chineseLegalEntries, ...detailEntries];
 }

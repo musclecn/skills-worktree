@@ -1,4 +1,4 @@
-import { PublishStatus } from "@prisma/client";
+import { type NewsCategory, PublishStatus } from "@prisma/client";
 import { pickLocalized } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import type { AppLocale } from "@/lib/types";
@@ -86,12 +86,12 @@ export async function getMenuData(locale: AppLocale) {
 }
 
 export async function getHomeData(locale: AppLocale) {
-  const [site, productCategories, solutions, news] = await Promise.all([
+  const [site, productCategories, solutions, news, industryNews] = await Promise.all([
     getSiteData(locale),
     prisma.productCategory.findMany({
       where: { publishStatus: PublishStatus.PUBLISHED },
       orderBy: { sortOrder: "asc" },
-      take: 4,
+      take: 5,
     }),
     prisma.solution.findMany({
       where: { publishStatus: PublishStatus.PUBLISHED },
@@ -102,6 +102,14 @@ export async function getHomeData(locale: AppLocale) {
       where: { publishStatus: PublishStatus.PUBLISHED },
       orderBy: [{ publishedAt: "desc" }, { sortOrder: "asc" }],
       take: 4,
+    }),
+    prisma.newsPost.findMany({
+      where: {
+        publishStatus: PublishStatus.PUBLISHED,
+        newsCategory: "INDUSTRY",
+      },
+      orderBy: [{ publishedAt: "desc" }, { sortOrder: "asc" }],
+      take: 5,
     }),
   ]);
 
@@ -128,6 +136,15 @@ export async function getHomeData(locale: AppLocale) {
       summary: pickLocalized(item, locale, "summaryZh", "summaryEn"),
       publishedAt: item.publishedAt,
       coverUrl: item.coverUrl,
+    })),
+    industryNews: industryNews.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      title: pickLocalized(item, locale, "titleZh", "titleEn"),
+      summary: pickLocalized(item, locale, "summaryZh", "summaryEn"),
+      publishedAt: item.publishedAt,
+      newsCategory: item.newsCategory,
+      sourceName: item.sourceName,
     })),
   };
 }
@@ -261,9 +278,21 @@ export async function getSolutionDetail(slug: string, locale: AppLocale) {
   };
 }
 
-export async function getNewsData(locale: AppLocale) {
+export type NewsCategoryFilter = NewsCategory | "ALL";
+
+export function parseNewsCategory(value: string | null | undefined): NewsCategoryFilter {
+  const normalized = value?.trim().toUpperCase();
+  if (normalized === "COMPANY") return "COMPANY";
+  if (normalized === "INDUSTRY") return "INDUSTRY";
+  return "ALL";
+}
+
+export async function getNewsData(locale: AppLocale, category: NewsCategoryFilter = "ALL") {
   const items = await prisma.newsPost.findMany({
-    where: { publishStatus: PublishStatus.PUBLISHED },
+    where: {
+      publishStatus: PublishStatus.PUBLISHED,
+      ...(category === "ALL" ? {} : { newsCategory: category }),
+    },
     orderBy: [{ publishedAt: "desc" }, { sortOrder: "asc" }],
   });
 
@@ -274,6 +303,9 @@ export async function getNewsData(locale: AppLocale) {
     summary: pickLocalized(item, locale, "summaryZh", "summaryEn"),
     publishedAt: item.publishedAt,
     coverUrl: item.coverUrl,
+    newsCategory: item.newsCategory,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
   }));
 }
 
@@ -293,7 +325,39 @@ export async function getNewsDetail(slug: string, locale: AppLocale) {
     content: pickLocalized(item, locale, "contentZh", "contentEn"),
     coverUrl: item.coverUrl,
     publishedAt: item.publishedAt,
+    newsCategory: item.newsCategory,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    hasEnglish: hasEnglishNews(item),
+    related: pickRelatedEntry(item, locale),
   };
+}
+
+/** 新闻正文后的相关入口：需要站内路径和对应语言的文案都存在才显示。 */
+function pickRelatedEntry(
+  item: { relatedPath: string | null; relatedLabelZh: string | null; relatedLabelEn: string | null },
+  locale: AppLocale,
+) {
+  const path = item.relatedPath?.trim() ?? "";
+  if (!path.startsWith("/") || path.startsWith("//")) return null;
+  const label = pickLocalized(item, locale, "relatedLabelZh", "relatedLabelEn").trim();
+  return label ? { path, label } : null;
+}
+
+function hasEnglishNews(item: { titleEn: string | null; contentEn: string | null }) {
+  return Boolean(item.titleEn?.trim()) && Boolean(item.contentEn?.trim());
+}
+
+/** 新闻是否有英文译文；文章不存在或未发布时返回 null。 */
+export async function getNewsEnglishAvailability(slug: string) {
+  const item = await prisma.newsPost.findUnique({
+    where: { slug },
+    select: { titleEn: true, contentEn: true, publishStatus: true },
+  });
+  if (!item || item.publishStatus !== PublishStatus.PUBLISHED) {
+    return null;
+  }
+  return hasEnglishNews(item);
 }
 
 export async function getPageData(slug: string, locale: AppLocale) {

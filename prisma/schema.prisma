@@ -23,6 +23,11 @@ enum PublishStatus {
   ARCHIVED
 }
 
+enum NewsCategory {
+  COMPANY
+  INDUSTRY
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String
@@ -243,6 +248,7 @@ model SolutionArchitectureBlock {
 model NewsPost {
   id                String            @id @default(cuid())
   slug              String            @unique
+  newsCategory      NewsCategory      @default(COMPANY)
   titleZh           String
   titleEn           String
   summaryZh         String?
@@ -250,12 +256,76 @@ model NewsPost {
   contentZh         String
   contentEn         String
   coverUrl          String?
+  sourceName        String?
+  sourceUrl         String?
+  externalId        String?
+  // 正文后的“泰可思相关内容”入口；relatedPath 为空时不显示。
+  relatedPath       String?
+  relatedLabelZh    String?
+  relatedLabelEn    String?
   publishStatus     PublishStatus     @default(PUBLISHED)
   publishedAt       DateTime?
   sortOrder         Int               @default(0)
   translationStatus TranslationStatus @default(REVIEWED)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+}
+
+model AppointmentRequest {
+  id           String   @id @default(cuid())
+  companyName  String
+  contactName  String
+  contactInfo  String
+  sourcePage   String?
+  notes        String?
+  // 咨询方向与语言
+  topic        String?
+  locale       String?
+  // 来源链路：由浏览器会话带入，不含联系资料
+  sessionId    String?
+  landingPath  String?
+  referrerHost String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  prevPath     String?
+  articleSlug  String?
+  productPath  String?
+  entryId      String?
+  // 防护与去重
+  submissionId String?  @unique
+  ipHash       String?
+  deviceClass  String?
+  contactKey   String?
+  // 人工复核：PENDING / VALID / INVALID / DUPLICATE / TEST
+  reviewStatus String   @default("PENDING")
+  anomalyFlags String?
+  reviewedAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([contactKey, createdAt])
+  @@index([ipHash, createdAt])
+}
+
+// 站内访问事件：只记录会话标识与页面路径，不含联系资料和 IP。
+model SiteEvent {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  sessionId    String
+  type         String
+  path         String
+  locale       String
+  target       String?
+  entryId      String?
+  articleSlug  String?
+  device       String?
+  referrerHost String?
+
+  @@index([createdAt])
+  @@index([type, createdAt])
+  @@index([sessionId])
 }
 
 model MediaAsset {

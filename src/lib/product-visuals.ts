@@ -38,9 +38,14 @@ export const PRODUCT_GALLERY_FALLBACKS: Record<string, string[]> = {
     "/ppt-slides/ppt2025/slide-115.png",
   ],
   "global-tax-intelligence-platform": [
-    "/ppt-slides/ppt-overseas/slide-002.png",
-    "/ppt-slides/ppt-overseas/slide-004.png",
-    "/ppt-slides/ppt-overseas/slide-006.png",
+    "/ppt-slides/ppt-overseas/slide-020.png",
+    "/ppt-slides/ppt-overseas/slide-021.png",
+    "/ppt-slides/ppt-overseas/slide-030.png",
+  ],
+  "electronic-receipt-system": [
+    "/receipt-system/receipt-manual-issue.png",
+    "/receipt-system/receipt-statistics.png",
+    "/receipt-system/receipt-notifications.png",
   ],
   "full-ticket-pass": [
     "/ppt-slides/ppt2025/slide-079.png",

@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "upload:short-video": "node scripts/upload-short-video.mjs",
     "extract:ppt-slides": "node scripts/extract-ppt-slides.mjs",
     "process:ppt-slides": "python3 scripts/process-ppt-slides.py",
     "db:generate": "prisma generate",
