@@ -209,6 +209,11 @@ function runSeed(databaseUrl: string) {
 function main() {
   const databaseUrl = process.env.DATABASE_URL ?? "file:./data/sztaxs.db";
   ensureSchema(databaseUrl);
+  // 线上发布只补结构、不跑 seed（seed 会覆盖正式内容）：npx tsx scripts/db-setup.ts --schema-only
+  if (process.argv.includes("--schema-only")) {
+    console.log("Schema-only mode: seed skipped");
+    return;
+  }
   runSeed(databaseUrl);
 }
 

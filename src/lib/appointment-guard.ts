@@ -24,9 +24,19 @@ export function hashValue(value: string) {
   return createHash("sha256").update(`${hashSalt()}:${value}`).digest("hex").slice(0, 32);
 }
 
+/**
+ * 访客 IP。线上 Nginx 用 $remote_addr 设置 X-Real-IP，访客无法伪造，优先使用。
+ * X-Forwarded-For 由 $proxy_add_x_forwarded_for 追加而成，首项可以被访客随意填写，
+ * 所以只作兜底，并取最后一项（离本服务最近的一跳）。
+ */
 export function getClientIp(req: Request) {
-  const forwarded = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return forwarded || req.headers.get("x-real-ip")?.trim() || "";
+  const realIp = req.headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+  const forwarded = (req.headers.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return forwarded.length > 0 ? forwarded[forwarded.length - 1] : "";
 }
 
 export function deviceClassFromUserAgent(userAgent: string | null | undefined) {

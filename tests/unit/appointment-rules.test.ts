@@ -168,3 +168,16 @@ describe("historical backfill", () => {
     expect(new Set(updates.map((item) => item.contactKey)).size).toBe(4);
   });
 });
+
+describe("client ip", () => {
+  it("prefers the nginx-set X-Real-IP and ignores a spoofed first X-Forwarded-For entry", async () => {
+    const { getClientIp } = await import("@/lib/appointment-guard");
+    const request = (headers: Record<string, string>) => new Request("http://localhost/", { headers });
+    // Nginx：X-Real-IP = $remote_addr，X-Forwarded-For = 访客自带值 + $remote_addr
+    expect(getClientIp(request({ "x-real-ip": "203.0.113.7", "x-forwarded-for": "1.2.3.4, 203.0.113.7" }))).toBe(
+      "203.0.113.7",
+    );
+    expect(getClientIp(request({ "x-forwarded-for": "1.2.3.4, 203.0.113.7" }))).toBe("203.0.113.7");
+    expect(getClientIp(request({}))).toBe("");
+  });
+});
