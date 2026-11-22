@@ -16,7 +16,7 @@ import { localizePath } from "@/lib/i18n";
 import { getShortVideos } from "@/lib/short-videos";
 import type { AppLocale } from "@/lib/types";
 import { HeroCarousel } from "@/components/public/HeroCarousel";
-import { AppointmentForm } from "@/components/public/AppointmentForm";
+import { AppointmentForm, type NativeSubmitStatus } from "@/components/public/AppointmentForm";
 import { HomeAIAssistantDock } from "@/components/public/HomeAIAssistantDock";
 import { FuelInvoiceDemoCard } from "@/components/public/FuelInvoiceDemoCard";
 
@@ -92,6 +92,10 @@ function getNewsCategoryLabel(locale: AppLocale, category: Exclude<NewsCategoryP
     return locale === "zh" ? "行业新闻" : "Industry News";
   }
   return locale === "zh" ? "公司新闻" : "Company News";
+}
+
+function parseNativeSubmitStatus(value: string | undefined): NativeSubmitStatus | undefined {
+  return value === "submitted" || value === "invalid" || value === "rate-limited" ? value : undefined;
 }
 
 function toNewsCategoryHref(locale: AppLocale, category: NewsCategoryParam, page = 1) {
@@ -2903,7 +2907,15 @@ export async function NewsDetailView({ locale, slug }: { locale: AppLocale; slug
   );
 }
 
-export async function StaticPageView({ locale, slug }: { locale: AppLocale; slug: string }) {
+export async function StaticPageView({
+  locale,
+  slug,
+  appointmentStatus,
+}: {
+  locale: AppLocale;
+  slug: string;
+  appointmentStatus?: string;
+}) {
   const page = await getPageData(slug, locale);
   if (!page) {
     notFound();
@@ -2923,7 +2935,7 @@ export async function StaticPageView({ locale, slug }: { locale: AppLocale; slug
         <div>{page.content}</div>
       </section>
 
-      {slug === "contact" ? <AppointmentForm locale={locale} /> : null}
+      {slug === "contact" ? <AppointmentForm locale={locale} nativeStatus={parseNativeSubmitStatus(appointmentStatus)} /> : null}
     </div>
   );
 }

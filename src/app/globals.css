@@ -160,14 +160,14 @@ a {
   transform: scaleX(1);
 }
 
-.nav .lang-switch {
+.header-actions .lang-switch {
   border: 1px solid rgba(10, 90, 181, 0.2);
   padding: 6px 10px;
   border-radius: 999px;
   color: var(--brand);
 }
 
-.nav .lang-switch::after {
+.header-actions .lang-switch::after {
   display: none;
 }
 
@@ -4148,7 +4148,7 @@ button.warn {
 /* ---- 访问评审优化（2026-11）：预约入口、表单反馈、新闻相关入口 ---- */
 
 /* 页头常驻的预约演示按钮 */
-.nav .nav-cta {
+.header-actions .nav-cta {
   padding: 6px 14px;
   border-radius: 999px;
   background: var(--brand);
@@ -4156,11 +4156,11 @@ button.warn {
   font-weight: 600;
 }
 
-.nav .nav-cta::after {
+.header-actions .nav-cta::after {
   display: none;
 }
 
-.nav .nav-cta:hover {
+.header-actions .nav-cta:hover {
   color: #ffffff;
   background: var(--brand-deep);
 }
@@ -4336,4 +4336,101 @@ button.warn {
   background: transparent;
   min-width: 20px;
   padding: 0 2px;
+}
+
+/* 导航靠右，紧挨操作区（与拆分操作区之前的桌面外观一致） */
+.header-inner > .nav {
+  margin-left: auto;
+}
+
+/* 页头操作区（预约演示 + 语言切换） */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.header-actions a {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.header-actions .lang-switch {
+  color: var(--brand);
+}
+
+/*
+ * 手机端紧凑页头：第一行 Logo + 操作区，第二行单行导航横向滑动。
+ * 原先导航折成三四行，吸顶后占去约五分之一屏幕。
+ */
+@media (max-width: 640px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo actions"
+      "nav nav";
+    align-items: center;
+    row-gap: 2px;
+    column-gap: 10px;
+    padding: 8px 0 0;
+  }
+
+  .logo {
+    grid-area: logo;
+  }
+
+  .logo-image {
+    height: 34px;
+  }
+
+  .header-actions {
+    grid-area: actions;
+    gap: 8px;
+  }
+
+  .header-actions .nav-cta {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .header-actions .lang-switch {
+    padding: 5px 9px;
+    font-size: 13px;
+  }
+
+  .header-inner > .nav {
+    margin-left: 0;
+  }
+
+  .nav {
+    grid-area: nav;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 18px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 6px 0 8px;
+    /* 右侧渐隐提示还能继续滑动 */
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav a {
+    flex-shrink: 0;
+    padding: 6px 0;
+  }
+
+  .nav a::after {
+    bottom: 0;
+  }
+
+  #appointment-form {
+    scroll-margin-top: 120px;
+  }
 }

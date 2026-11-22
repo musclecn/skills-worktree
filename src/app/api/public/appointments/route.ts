@@ -22,8 +22,32 @@ const TOO_MANY = {
   en: "Too many submissions. Please try again later or call our service line.",
 } as const;
 
+/** 浏览器未运行页面脚本时，表单以原生 POST 提交后跳回联系页，网址里只带结果状态。 */
+type NativeSubmitStatus = "submitted" | "invalid" | "rate-limited";
+
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
+  const contentType = req.headers.get("content-type") ?? "";
+  const isNativeForm = /application\/x-www-form-urlencoded|multipart\/form-data/i.test(contentType);
+  if (!isNativeForm) {
+    return handleAppointment(await req.json().catch(() => null), req);
+  }
+
+  const form = await req.formData().catch(() => null);
+  const body: Record<string, string> = {};
+  form?.forEach((value, key) => {
+    if (typeof value === "string") body[key] = value;
+  });
+  const response = await handleAppointment(body, req);
+  const status: NativeSubmitStatus =
+    response.status === 200 ? "submitted" : response.status === 429 ? "rate-limited" : "invalid";
+  const back = body.locale === "en" ? "/en/contact" : "/contact";
+  return new Response(null, {
+    status: 303,
+    headers: { Location: `${back}?appointment=${status}#appointment-form`, "Cache-Control": "no-store" },
+  });
+}
+
+async function handleAppointment(body: unknown, req: Request) {
   const raw = typeof body === "object" && body ? (body as Record<string, unknown>) : {};
   const payload = normalizeAppointmentInput(body);
   const locale = payload.locale ?? "zh";

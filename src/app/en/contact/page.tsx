@@ -16,10 +16,15 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function EnContactPage() {
+export default async function EnContactPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ appointment?: string }>;
+}) {
+  const resolved = searchParams ? await searchParams : undefined;
   return (
     <PublicChrome locale="en">
-      <StaticPageView locale="en" slug="contact" />
+      <StaticPageView locale="en" slug="contact" appointmentStatus={resolved?.appointment} />
     </PublicChrome>
   );
 }

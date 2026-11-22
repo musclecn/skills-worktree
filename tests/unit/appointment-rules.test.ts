@@ -181,3 +181,19 @@ describe("client ip", () => {
     expect(getClientIp(request({}))).toBe("");
   });
 });
+
+describe("native form field names", () => {
+  it("uses the same field names as the appointment API so script-less submits validate", async () => {
+    const fs = await import("node:fs");
+    const source = fs.readFileSync("src/components/public/AppointmentForm.tsx", "utf8");
+    const names = [...source.matchAll(/name="([A-Za-z]+)"/g)].map((match) => match[1]);
+    for (const field of ["companyName", "contactName", "contactInfo", "topic", "locale", "sourcePage", "website"]) {
+      expect(names).toContain(field);
+    }
+    const { normalizeAppointmentInput, validateAppointmentInput } = await import("@/lib/appointment");
+    const fromForm = normalizeAppointmentInput(
+      Object.fromEntries(new URLSearchParams("companyName=A&contactName=B&contactInfo=13800000000&locale=zh")),
+    );
+    expect(validateAppointmentInput(fromForm, { strictContact: true })).toBeNull();
+  });
+});

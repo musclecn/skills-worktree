@@ -200,6 +200,49 @@ describe.sequential("appointment protection and attribution", () => {
     expect(notify).not.toHaveBeenCalled();
   });
 
+  it("accepts native form posts without page scripts and redirects back without contact details", async () => {
+    const { POST } = await import("@/app/api/public/appointments/route");
+    const { prisma } = await import("@/lib/prisma");
+    const formRequest = (fields: Record<string, string>, ip: string) =>
+      new Request("http://localhost/api/public/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "x-real-ip": ip, "user-agent": BROWSER_UA },
+        body: new URLSearchParams(fields).toString(),
+      });
+
+    const ok = await POST(
+      formRequest(
+        {
+          locale: "zh",
+          sourcePage: "/contact",
+          entryId: "native-form",
+          companyName: "无脚本测试公司",
+          contactName: "钱工",
+          contactInfo: "13800138020",
+          topic: "archive",
+          website: "",
+        },
+        "203.0.113.60",
+      ),
+    );
+    expect(ok.status).toBe(303);
+    const location = ok.headers.get("location") ?? "";
+    expect(location).toBe("/contact?appointment=submitted#appointment-form");
+    expect(location).not.toContain("13800138020");
+    const row = await prisma.appointmentRequest.findFirstOrThrow({ where: { companyName: "无脚本测试公司" } });
+    expect(row).toMatchObject({ entryId: "native-form", sourcePage: "/contact", topic: "archive", locale: "zh", reviewStatus: "PENDING" });
+    expect(notify).toHaveBeenCalledTimes(1);
+
+    const invalid = await POST(formRequest({ locale: "zh", companyName: "", contactName: "", contactInfo: "" }, "203.0.113.61"));
+    expect(invalid.status).toBe(303);
+    expect(invalid.headers.get("location")).toBe("/contact?appointment=invalid#appointment-form");
+
+    const en = await POST(
+      formRequest({ locale: "en", companyName: "Acme", contactName: "Tester", contactInfo: "not a phone" }, "203.0.113.62"),
+    );
+    expect(en.headers.get("location")).toBe("/en/contact?appointment=invalid#appointment-form");
+  });
+
   it("lets staff set the review status and reports aggregates without contact details (A10)", async () => {
     const { POST } = await import("@/app/api/public/appointments/route");
     const { PUT } = await import("@/app/api/admin/appointments/[id]/route");

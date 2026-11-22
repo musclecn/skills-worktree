@@ -17,10 +17,15 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function ZhContactPage() {
+export default async function ZhContactPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ appointment?: string }>;
+}) {
+  const resolved = searchParams ? await searchParams : undefined;
   return (
     <PublicChrome locale="zh">
-      <StaticPageView locale="zh" slug="contact" />
+      <StaticPageView locale="zh" slug="contact" appointmentStatus={resolved?.appointment} />
     </PublicChrome>
   );
 }

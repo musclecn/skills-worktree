@@ -73,12 +73,15 @@ export async function PublicChrome({
             <Image className="logo-image" src={logoSrc} alt={logoAlt} width={280} height={98} priority />
             <span className="sr-only">{site?.companyName ?? "泰可思"}</span>
           </Link>
-          <nav className="nav">
+          <nav className="nav" aria-label={locale === "zh" ? "主导航" : "Main navigation"}>
             {normalizedMenus.map((menu) => (
               <Link key={menu.id} href={localizePath(locale, menu.path)}>
                 {menu.label}
               </Link>
             ))}
+          </nav>
+          {/* 预约与语言切换独立成一组：手机端放在 Logo 同一行，导航单独一行横向滑动 */}
+          <div className="header-actions">
             <Link
               className="nav-cta"
               href={`${localizePath(locale, "/contact")}#appointment-form`}
@@ -90,7 +93,7 @@ export async function PublicChrome({
             <Suspense fallback={<LangSwitchFallback locale={locale} />}>
               <LangSwitch locale={locale} overrideHref={langSwitchHref} />
             </Suspense>
-          </nav>
+          </div>
         </div>
       </header>
 

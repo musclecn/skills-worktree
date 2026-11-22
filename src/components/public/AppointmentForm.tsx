@@ -18,6 +18,9 @@ type AppointmentFormState = {
 
 type Feedback = { kind: "success" | "error"; text: string } | null;
 
+/** 无脚本原生提交后，联系页网址里带回的结果状态 */
+export type NativeSubmitStatus = "submitted" | "invalid" | "rate-limited";
+
 function createEmptyForm(topic = ""): AppointmentFormState {
   return {
     companyName: "",
@@ -28,10 +31,10 @@ function createEmptyForm(topic = ""): AppointmentFormState {
   };
 }
 
-export function AppointmentForm({ locale }: { locale: AppLocale }) {
+export function AppointmentForm({ locale, nativeStatus }: { locale: AppLocale; nativeStatus?: NativeSubmitStatus }) {
   const [form, setForm] = useState<AppointmentFormState>(createEmptyForm());
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<Feedback>(null);
+  const [feedback, setFeedback] = useState<Feedback>(() => nativeFeedback(locale, nativeStatus));
   const feedbackRef = useRef<HTMLDivElement>(null);
   // 同一次提交的重试共用一个编号，服务端据此只保留一条。
   const submissionIdRef = useRef("");
@@ -86,6 +89,14 @@ export function AppointmentForm({ locale }: { locale: AppLocale }) {
           },
     [locale],
   );
+
+  // 无脚本提交跳回后，把网址里的结果参数去掉，避免刷新或分享时重复显示
+  useEffect(() => {
+    if (!nativeStatus || typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("appointment");
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+  }, [nativeStatus]);
 
   // 按访客最近看过的产品预选咨询方向，访客可以改，也可以清空。
   useEffect(() => {
@@ -182,12 +193,19 @@ export function AppointmentForm({ locale }: { locale: AppLocale }) {
         {feedback?.text}
       </div>
 
-      <form className="appointment-form-grid" onSubmit={submit} noValidate={false}>
+      {/*
+        有脚本时由 onSubmit 拦截并以 JSON 提交；脚本未运行（旧浏览器、加载失败）时浏览器以 POST
+        原生提交到接口，接口处理后跳回本页。必须是 POST，否则填写内容会出现在网址和服务器日志里。
+      */}
+      <form className="appointment-form-grid" onSubmit={submit} method="post" action="/api/public/appointments">
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="sourcePage" value={localizePath(locale, "/contact")} />
+        <input type="hidden" name="entryId" value="native-form" />
         <label>
           {text.companyName}
           <input
             type="text"
-            name="organization"
+            name="companyName"
             autoComplete="organization"
             required
             maxLength={120}
@@ -200,7 +218,7 @@ export function AppointmentForm({ locale }: { locale: AppLocale }) {
           {text.contactName}
           <input
             type="text"
-            name="name"
+            name="contactName"
             autoComplete="name"
             required
             maxLength={80}
@@ -213,7 +231,7 @@ export function AppointmentForm({ locale }: { locale: AppLocale }) {
           {text.contactInfo}
           <input
             type="text"
-            name="contact"
+            name="contactInfo"
             autoComplete={locale === "zh" ? "tel" : "email"}
             inputMode={locale === "zh" ? "tel" : "email"}
             required
@@ -271,4 +289,24 @@ export function AppointmentForm({ locale }: { locale: AppLocale }) {
       </form>
     </section>
   );
+}
+
+function nativeFeedback(locale: AppLocale, status: NativeSubmitStatus | undefined): Feedback {
+  if (!status) return null;
+  const zh = locale === "zh";
+  if (status === "submitted") {
+    return { kind: "success", text: zh ? "预约已提交，我们会在 1 个工作日内与您联系。" : "Request submitted. We will contact you within one business day." };
+  }
+  if (status === "rate-limited") {
+    return {
+      kind: "error",
+      text: zh ? "提交过于频繁，请稍后再试，或直接拨打服务热线。" : "Too many submissions. Please try again later or call our service line.",
+    };
+  }
+  return {
+    kind: "error",
+    text: zh
+      ? "提交未成功：请填写公司名称、联系人，以及正确的手机号、电话或邮箱后重新提交。"
+      : "Submission failed. Please enter your company name, contact person and a valid phone number or email, then try again.",
+  };
 }
