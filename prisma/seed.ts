@@ -1346,16 +1346,15 @@ const PRODUCT_OVERRIDES: Record<string, ProductSeed> = {
 };
 
 async function seedUsers() {
-  const adminPassword = await hashPassword("Admin@12345");
-  const editorPassword = await hashPassword("Editor@12345");
+  // 初始账号只在“不存在时”创建；已有账号一律不改（尤其不重置密码）。
+  // 部署环境请用 SEED_ADMIN_PASSWORD / SEED_EDITOR_PASSWORD 指定初始密码；
+  // 未设置时使用仓库里的默认值，仅适合本地开发，上线后必须立即在后台修改。
+  const adminPassword = await hashPassword(process.env.SEED_ADMIN_PASSWORD || "Admin@12345");
+  const editorPassword = await hashPassword(process.env.SEED_EDITOR_PASSWORD || "Editor@12345");
 
   await prisma.user.upsert({
     where: { email: "admin@sztaxs.com" },
-    update: {
-      name: "系统管理员",
-      role: UserRole.ADMIN,
-      passwordHash: adminPassword,
-    },
+    update: {},
     create: {
       name: "系统管理员",
       email: "admin@sztaxs.com",
@@ -1366,11 +1365,7 @@ async function seedUsers() {
 
   await prisma.user.upsert({
     where: { email: "editor@sztaxs.com" },
-    update: {
-      name: "内容编辑",
-      role: UserRole.EDITOR,
-      passwordHash: editorPassword,
-    },
+    update: {},
     create: {
       name: "内容编辑",
       email: "editor@sztaxs.com",
