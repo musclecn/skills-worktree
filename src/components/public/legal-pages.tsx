@@ -8,6 +8,9 @@ export const ESR_PRODUCT_PATH = "/en/export-sales-reconciliation";
 export const ESR_APP_NAME_ZH = `${ESR_APP_NAME}（出口销售再核算）`;
 export const ESR_PRODUCT_SUMMARY = "Reconcile export customs declarations with actual marketplace sales for exporters selling through overseas fulfillment centers.";
 export const ESR_LAST_UPDATED = "October 23, 2026";
+// 隐私政策单独记录更新日期：2026-11-21 补充官网访问统计说明，服务条款未变。
+export const PRIVACY_LAST_UPDATED = "November 21, 2026";
+const PRIVACY_LAST_UPDATED_ZH = "2026年11月21日";
 
 const FALLBACK_COMPANY = "Suzhou Taxs Data Technology Co., Ltd.";
 const FALLBACK_EMAIL = "service@sztaxs.com";
@@ -177,7 +180,7 @@ export async function PrivacyPolicyView() {
         <p className="eyebrow">Legal</p>
         <h1>Privacy Policy</h1>
         <Link className="legal-language-link" href="/privacy" lang="zh-CN">中文版</Link>
-        <p>Last updated: {ESR_LAST_UPDATED}</p>
+        <p>Last updated: {PRIVACY_LAST_UPDATED}</p>
       </section>
 
       <section className="detail-block legal-body motion-reveal">
@@ -259,13 +262,22 @@ export async function PrivacyPolicyView() {
           <a href={`mailto:${contact.email}`}>{contact.email}</a>.
         </p>
 
-        <h2>8. Changes</h2>
+        <h2>8. Website analytics</h2>
+        <p>
+          Separately from the Service, our website (www1.sztaxs.com) uses first-party visit analytics. It records
+          anonymous events such as page views, link clicks and booking-form submission results, linked only to a random
+          session identifier that expires after 30 minutes of inactivity. It does not use cookies, does not include IP
+          addresses or contact details, and does not use third-party analytics services. We use it only to improve the
+          website&apos;s content and navigation.
+        </p>
+
+        <h2>9. Changes</h2>
         <p>
           We will post changes on this page and update the date above. Material changes will be notified to customers in
           advance.
         </p>
 
-        <h2>9. Contact</h2>
+        <h2>10. Contact</h2>
         <ContactLine contact={contact} />
         <LegalLinks />
       </section>
@@ -376,7 +388,7 @@ export async function ChinesePrivacyPolicyView() {
         <p className="eyebrow">法律信息</p>
         <h1>隐私政策</h1>
         <Link className="legal-language-link" href="/en/privacy" lang="en">English version</Link>
-        <p>最后更新：2026年10月23日</p>
+        <p>最后更新：{PRIVACY_LAST_UPDATED_ZH}</p>
       </section>
       <section className="detail-block legal-body motion-reveal">
         <p>{contact.company}（以下简称“我们”）提供 {ESR_APP_NAME_ZH}（以下简称“本服务”）。本政策说明我们通过本服务收集哪些数据，以及如何使用、存储、保护、共享和删除这些数据。</p>
@@ -415,10 +427,13 @@ export async function ChinesePrivacyPolicyView() {
         <h2>7. 您的权利</h2>
         <p>用户可依据适用法律（包括《中华人民共和国个人信息保护法》）访问、更正或删除其账户数据，以及撤回同意。请联系 <a href={`mailto:${contact.email}`}>{contact.email}</a>。</p>
 
-        <h2>8. 变更</h2>
+        <h2>8. 官网访问统计</h2>
+        <p>本服务之外，我们的官网（www1.sztaxs.com）使用自有的访问统计，记录页面浏览、链接点击和预约表单提交结果等匿名事件，仅关联一个随机生成、30 分钟无操作即失效的会话标识；不使用 Cookie，不包含 IP 地址或联系方式，也不使用第三方统计服务。统计数据仅用于改进官网内容和栏目入口。</p>
+
+        <h2>9. 变更</h2>
         <p>我们将在本页面公布变更，并更新上方日期。重大变更将提前通知客户。</p>
 
-        <h2>9. 联系方式</h2>
+        <h2>10. 联系方式</h2>
         <ContactLine contact={contact} locale="zh" />
         <LegalLinks locale="zh" />
       </section>
