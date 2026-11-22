@@ -17,6 +17,7 @@ import { getShortVideos } from "@/lib/short-videos";
 import type { AppLocale } from "@/lib/types";
 import { HeroCarousel } from "@/components/public/HeroCarousel";
 import { AppointmentForm, type NativeSubmitStatus } from "@/components/public/AppointmentForm";
+import { LazyAutoplayVideo } from "@/components/public/LazyAutoplayVideo";
 import { HomeAIAssistantDock } from "@/components/public/HomeAIAssistantDock";
 import { FuelInvoiceDemoCard } from "@/components/public/FuelInvoiceDemoCard";
 
@@ -284,16 +285,8 @@ function CompanyIntroVideo({ locale, variant }: { locale: AppLocale; variant: "h
   return (
     <section className={`company-intro-video company-intro-video-${variant} motion-reveal`}>
       <div className="company-intro-player">
-        <video
-          autoPlay
-          controls
-          muted
-          playsInline
-          preload="auto"
-          poster={COMPANY_INTRO_POSTER_URL}
-          src={COMPANY_INTRO_VIDEO_URL}
-          aria-label={title}
-        />
+        {/* 静音自动播放：进入屏幕才加载播放（视频约 62MB，手机上不在首屏时不白白下载） */}
+        <LazyAutoplayVideo controls poster={COMPANY_INTRO_POSTER_URL} src={COMPANY_INTRO_VIDEO_URL} ariaLabel={title} />
       </div>
       {variant === "about" ? <CompanyIntroCopy locale={locale} /> : null}
     </section>
@@ -1252,14 +1245,17 @@ function ProductVisual({
   asset,
   className,
   priority = false,
+  sizes,
 }: {
   asset: { src: string; alt: string };
   className: string;
   priority?: boolean;
+  /** 按实际显示宽度告诉浏览器该下载多大的图；不填时浏览器会按 1600px 下载 1920 宽的版本 */
+  sizes: string;
 }) {
   return (
     <div className={className}>
-      <Image src={asset.src} alt={asset.alt} width={1600} height={900} priority={priority} />
+      <Image src={asset.src} alt={asset.alt} width={1600} height={900} priority={priority} sizes={sizes} />
     </div>
   );
 }
@@ -1696,15 +1692,11 @@ export async function HomeView({ locale }: { locale: AppLocale }) {
         </div>
         <Link className="solution-spotlight-card ai-home-card" href={localizePath(locale, "/ai-agent")}>
           <div className="ai-home-visual">
-            <video
+            <LazyAutoplayVideo
+              loop
               src={DATA_ANALYSIS_AGENT_VIDEO_URL}
               poster={DATA_ANALYSIS_AGENT_VIDEO_POSTER_URL}
-              muted
-              autoPlay
-              loop
-              playsInline
-              preload="metadata"
-              aria-label={locale === "zh" ? "数据分析智能体平台演示视频" : "Data analysis agent platform demo video"}
+              ariaLabel={locale === "zh" ? "数据分析智能体平台演示视频" : "Data analysis agent platform demo video"}
             />
           </div>
           <div className="solution-spotlight-body">
@@ -2409,7 +2401,13 @@ export async function ProductsView({ locale }: { locale: AppLocale }) {
                     key={product.id}
                     href={localizePath(locale, `/products/${product.slug}`)}
                   >
-                    {visual ? <ProductVisual asset={visual} className="product-submenu-media" /> : null}
+                    {visual ? (
+                      <ProductVisual
+                        asset={visual}
+                        className="product-submenu-media"
+                        sizes="(max-width: 640px) 92vw, (max-width: 980px) 45vw, 380px"
+                      />
+                    ) : null}
                     <span className="product-submenu-index">{String(index + 1).padStart(2, "0")}</span>
                     <div>
                       <h3>{product.name}</h3>
@@ -2483,7 +2481,14 @@ export async function ProductDetailView({ locale, slug }: { locale: AppLocale; s
             </div>
           </div>
 
-          {heroVisual ? <ProductVisual asset={heroVisual} className="product-hero-visual" priority /> : null}
+          {heroVisual ? (
+            <ProductVisual
+              asset={heroVisual}
+              className="product-hero-visual"
+              priority
+              sizes="(max-width: 980px) 92vw, 420px"
+            />
+          ) : null}
         </section>
 
         {productVideo ? (
