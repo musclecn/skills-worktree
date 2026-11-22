@@ -66,3 +66,13 @@ describe("language switch target", () => {
     expect(localeFromPathname("/news")).toBe("zh");
   });
 });
+
+describe("news pagination params", () => {
+  it("keeps the page number when switching language", async () => {
+    const { getAlternateHref } = await import("@/lib/i18n");
+    expect(getAlternateHref("zh", "/news", "category=industry&page=3")).toBe("/en/news?category=industry&page=3");
+    expect(getAlternateHref("en", "/en/news", "page=2")).toBe("/news?page=2");
+    expect(getAlternateHref("zh", "/news", "page=1")).toBe("/en/news");
+    expect(getAlternateHref("zh", "/news", "page=abc")).toBe("/en/news");
+  });
+});

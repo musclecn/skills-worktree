@@ -14,6 +14,12 @@ else
   echo "Database file $DB_FILE does not exist yet, skipping backup"
 fi
 
-npm run db:setup
+# 已有数据库时只补表结构，不跑 seed：seed 会用代码里的基准内容覆盖后台改过的正式内容。
+# 只有全新部署（数据库文件不存在）才执行完整初始化；确需重跑 seed 时设 SEED_ON_START=1。
+if [ -f "$DB_FILE" ] && [ "${SEED_ON_START:-0}" != "1" ]; then
+  npx tsx scripts/db-setup.ts --schema-only
+else
+  npm run db:setup
+fi
 
 exec npm run start -- -p "${PORT:-3000}"

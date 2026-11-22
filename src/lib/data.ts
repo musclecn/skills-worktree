@@ -287,16 +287,20 @@ export function parseNewsCategory(value: string | null | undefined): NewsCategor
   return "ALL";
 }
 
-export async function getNewsData(locale: AppLocale, category: NewsCategoryFilter = "ALL") {
-  const items = await prisma.newsPost.findMany({
-    where: {
-      publishStatus: PublishStatus.PUBLISHED,
-      ...(category === "ALL" ? {} : { newsCategory: category }),
-    },
-    orderBy: [{ publishedAt: "desc" }, { sortOrder: "asc" }],
-  });
+function newsListWhere(category: NewsCategoryFilter) {
+  return {
+    publishStatus: PublishStatus.PUBLISHED,
+    ...(category === "ALL" ? {} : { newsCategory: category }),
+  };
+}
 
-  return items.map((item) => ({
+const NEWS_LIST_ORDER = [{ publishedAt: "desc" as const }, { sortOrder: "asc" as const }];
+
+function toNewsListItem(
+  item: Awaited<ReturnType<typeof prisma.newsPost.findMany>>[number],
+  locale: AppLocale,
+) {
+  return {
     id: item.id,
     slug: item.slug,
     title: pickLocalized(item, locale, "titleZh", "titleEn"),
@@ -306,7 +310,43 @@ export async function getNewsData(locale: AppLocale, category: NewsCategoryFilte
     newsCategory: item.newsCategory,
     sourceName: item.sourceName,
     sourceUrl: item.sourceUrl,
-  }));
+  };
+}
+
+/** 全部已发布新闻（公开接口用，不分页）。 */
+export async function getNewsData(locale: AppLocale, category: NewsCategoryFilter = "ALL") {
+  const items = await prisma.newsPost.findMany({
+    where: newsListWhere(category),
+    orderBy: NEWS_LIST_ORDER,
+  });
+  return items.map((item) => toNewsListItem(item, locale));
+}
+
+export const NEWS_PAGE_SIZE = 20;
+
+/** 解析列表页码：只接受 1–9999 的整数，其余一律当作第 1 页。 */
+export function parseNewsPage(value: string | null | undefined) {
+  const text = value?.trim() ?? "";
+  if (!/^\d{1,4}$/.test(text)) return 1;
+  const page = Number(text);
+  return page >= 1 ? page : 1;
+}
+
+/** 新闻列表分页。page 超过总页数时 items 为空，由页面决定返回 404。 */
+export async function getNewsPage(
+  locale: AppLocale,
+  category: NewsCategoryFilter = "ALL",
+  page = 1,
+  pageSize = NEWS_PAGE_SIZE,
+) {
+  const where = newsListWhere(category);
+  const total = await prisma.newsPost.count({ where });
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const items =
+    page > pageCount
+      ? []
+      : await prisma.newsPost.findMany({ where, orderBy: NEWS_LIST_ORDER, skip: (page - 1) * pageSize, take: pageSize });
+  return { items: items.map((item) => toNewsListItem(item, locale)), total, page, pageCount, pageSize };
 }
 
 export async function getNewsDetail(slug: string, locale: AppLocale) {

@@ -74,6 +74,9 @@ export function getAlternateHref(
       const value = source.get(key)?.trim().toLowerCase();
       if (value && allowed.has(value)) kept.set(key, value);
     }
+    // 两种语言的新闻列表条目相同，页码可以直接沿用
+    const page = source.get("page")?.trim() ?? "";
+    if (/^\d{1,4}$/.test(page) && Number(page) > 1) kept.set("page", String(Number(page)));
   }
 
   const query = kept.toString();

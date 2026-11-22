@@ -18,7 +18,17 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body>{children}</body>
+      <body>
+        {/* 首屏英文标题用到的拉丁字体，提前加载以减少字体切换闪烁 */}
+        <link
+          rel="preload"
+          href="/fonts/plus-jakarta-sans-latin-wght-normal.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        {children}
+      </body>
     </html>
   );
 }

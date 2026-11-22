@@ -4,8 +4,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   getHomeData,
-  getNewsData,
   getNewsDetail,
+  getNewsPage,
   getPageData,
   getProductDetail,
   getProductsData,
@@ -70,6 +70,8 @@ function renderNewsContent(content: string, locale: AppLocale) {
     if (imageUrl) {
       return (
         <figure key={`image-${index}`} className="news-content-figure">
+          {/* 配图来自第三方新闻源，域名不固定，无法列入 next/image 的白名单 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt={locale === "zh" ? `新闻配图 ${index + 1}` : `News image ${index + 1}`}
@@ -92,10 +94,86 @@ function getNewsCategoryLabel(locale: AppLocale, category: Exclude<NewsCategoryP
   return locale === "zh" ? "公司新闻" : "Company News";
 }
 
-function toNewsCategoryHref(locale: AppLocale, category: NewsCategoryParam) {
-  const basePath = localizePath(locale, "/news");
-  if (category === "ALL") return basePath;
-  return `${basePath}?category=${category.toLowerCase()}`;
+function toNewsCategoryHref(locale: AppLocale, category: NewsCategoryParam, page = 1) {
+  const params = new URLSearchParams();
+  if (category !== "ALL") params.set("category", category.toLowerCase());
+  if (page > 1) params.set("page", String(page));
+  const query = params.toString();
+  return query ? `${localizePath(locale, "/news")}?${query}` : localizePath(locale, "/news");
+}
+
+/** 分页页码：首页、末页、当前页前后各两页，其余用省略号。 */
+function paginationItems(page: number, pageCount: number): (number | "gap")[] {
+  const pages = new Set<number>([1, pageCount]);
+  for (let index = page - 2; index <= page + 2; index += 1) {
+    if (index >= 1 && index <= pageCount) pages.add(index);
+  }
+  const sorted = [...pages].sort((a, b) => a - b);
+  const items: (number | "gap")[] = [];
+  sorted.forEach((value, index) => {
+    if (index > 0 && value - sorted[index - 1] > 1) items.push("gap");
+    items.push(value);
+  });
+  return items;
+}
+
+function NewsPagination({
+  locale,
+  category,
+  page,
+  pageCount,
+  total,
+}: {
+  locale: AppLocale;
+  category: NewsCategoryParam;
+  page: number;
+  pageCount: number;
+  total: number;
+}) {
+  if (pageCount <= 1) return null;
+  const zh = locale === "zh";
+  return (
+    <nav className="news-pagination motion-reveal" aria-label={zh ? "新闻列表分页" : "News pagination"}>
+      <p className="news-pagination-summary">
+        {zh ? `第 ${page} / ${pageCount} 页 · 共 ${total} 条` : `Page ${page} of ${pageCount} · ${total} articles`}
+      </p>
+      <div className="news-pagination-links">
+        {page > 1 ? (
+          <Link href={toNewsCategoryHref(locale, category, page - 1)} rel="prev">
+            {zh ? "上一页" : "Previous"}
+          </Link>
+        ) : (
+          <span className="is-disabled" aria-hidden="true">
+            {zh ? "上一页" : "Previous"}
+          </span>
+        )}
+        {paginationItems(page, pageCount).map((item, index) =>
+          item === "gap" ? (
+            <span key={`gap-${index}`} className="news-pagination-gap" aria-hidden="true">
+              …
+            </span>
+          ) : item === page ? (
+            <span key={item} className="is-current" aria-current="page">
+              {item}
+            </span>
+          ) : (
+            <Link key={item} href={toNewsCategoryHref(locale, category, item)} aria-label={zh ? `第 ${item} 页` : `Page ${item}`}>
+              {item}
+            </Link>
+          ),
+        )}
+        {page < pageCount ? (
+          <Link href={toNewsCategoryHref(locale, category, page + 1)} rel="next">
+            {zh ? "下一页" : "Next"}
+          </Link>
+        ) : (
+          <span className="is-disabled" aria-hidden="true">
+            {zh ? "下一页" : "Next"}
+          </span>
+        )}
+      </div>
+    </nav>
+  );
 }
 
 const HOME_STATS = [
@@ -2690,13 +2768,20 @@ export async function SolutionDetailView({ locale, slug }: { locale: AppLocale; 
 export async function NewsView({
   locale,
   category = "ALL",
+  page = 1,
   untranslatedNotice = false,
 }: {
   locale: AppLocale;
   category?: NewsCategoryParam;
+  page?: number;
   untranslatedNotice?: boolean;
 }) {
-  const data = await getNewsData(locale, category);
+  const result = await getNewsPage(locale, category, page);
+  // 超出总页数的页码返回 404，避免产生大量重复的空列表页
+  if (page > result.pageCount) {
+    notFound();
+  }
+  const data = result.items;
   const tabs: { key: NewsCategoryParam; label: string }[] = [
     { key: "ALL", label: locale === "zh" ? "全部新闻" : "All News" },
     { key: "COMPANY", label: locale === "zh" ? "公司新闻" : "Company News" },
@@ -2747,6 +2832,8 @@ export async function NewsView({
           </Link>
         ))}
       </section>
+
+      <NewsPagination locale={locale} category={category} page={result.page} pageCount={result.pageCount} total={result.total} />
     </div>
   );
 }

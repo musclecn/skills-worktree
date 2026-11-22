@@ -21,18 +21,15 @@ export function HeroCarousel({ images, alt, intervalMs = 3500 }: HeroCarouselPro
     return () => window.clearInterval(timer);
   }, [safeImages.length, intervalMs]);
 
-  useEffect(() => {
-    if (activeIndex >= safeImages.length) {
-      setActiveIndex(0);
-    }
-  }, [activeIndex, safeImages.length]);
+  // 图片数量变少时直接按第 1 张显示，不在 effect 里回写状态
+  const currentIndex = activeIndex < safeImages.length ? activeIndex : 0;
 
   if (safeImages.length === 0) return null;
 
   return (
     <div className={`hero-visual-carousel${safeImages.length <= 1 ? " single" : ""}`}>
       {safeImages.map((src, index) => (
-        <div className={`hero-visual-slide${index === activeIndex ? " active" : ""}`} key={`${src}-${index}`}>
+        <div className={`hero-visual-slide${index === currentIndex ? " active" : ""}`} key={`${src}-${index}`}>
           <Image src={src} alt={`${alt} ${index + 1}`} fill sizes="(max-width: 980px) 100vw, 50vw" priority={index === 0} />
         </div>
       ))}

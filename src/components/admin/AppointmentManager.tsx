@@ -246,6 +246,8 @@ export function AppointmentManager() {
             <button className="secondary" type="button" onClick={() => void load()}>
               刷新
             </button>
+            {/* 下载接口不是页面，必须走普通链接触发文件下载 */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a className="appointment-export-link" href="/api/admin/appointments/export">
               导出 CSV
             </a>
