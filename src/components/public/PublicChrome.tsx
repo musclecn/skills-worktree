@@ -67,6 +67,10 @@ export async function PublicChrome({
 
   return (
     <div className="app-shell">
+      {/* 键盘和读屏用户可跳过页头导航，直接到正文 */}
+      <a className="skip-link" href="#main-content">
+        {locale === "zh" ? "跳到正文" : "Skip to main content"}
+      </a>
       <header className="site-header">
         <div className="container header-inner">
           <Link className="logo" href={localizePath(locale, "/")}>
@@ -99,7 +103,9 @@ export async function PublicChrome({
 
       <SiteAnalytics />
 
-      <main className="site-main">{children}</main>
+      <main className="site-main" id="main-content" tabIndex={-1}>
+        {children}
+      </main>
 
       <footer className="site-footer">
         <div className="container footer-inner">

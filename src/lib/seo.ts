@@ -52,7 +52,7 @@ function parseKeywords(value?: string | null) {
   return keywords.length > 0 ? keywords : undefined;
 }
 
-function toAbsoluteUrl(path: string) {
+export function toAbsoluteUrl(path: string) {
   if (/^https?:\/\//i.test(path)) {
     return path;
   }
@@ -112,4 +112,30 @@ export async function buildSeoMetadataByPageKey(input: BuildSeoMetadataInput): P
     keywords: seo?.keywords,
     ogImageUrl: seo?.ogImageUrl,
   });
+}
+
+type OrganizationSource = {
+  companyName?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  logoUrl?: string | null;
+};
+
+/**
+ * 首页的组织结构化数据（schema.org Organization），帮助搜索引擎识别公司名称、Logo 与联系方式。
+ * 输出前把 `<` 转义，防止内容里出现的标签打断 script（Next 官方 JSON-LD 指南的做法）。
+ */
+export function buildOrganizationJsonLd(locale: AppLocale, site: OrganizationSource | null | undefined) {
+  const data: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site?.companyName || (locale === "zh" ? "苏州泰可思数据科技有限公司" : "Suzhou Taxs Data Technology Co., Ltd."),
+    url: toAbsoluteUrl(localizePath(locale, "/")),
+    logo: toAbsoluteUrl(site?.logoUrl || "/brand/taxs-logo.svg"),
+  };
+  if (site?.email) data.email = site.email;
+  if (site?.phone) data.telephone = site.phone;
+  if (site?.address) data.address = { "@type": "PostalAddress", streetAddress: site.address, addressCountry: "CN" };
+  return JSON.stringify(data).replace(/</g, "\\u003c");
 }

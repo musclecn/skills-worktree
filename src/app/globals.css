@@ -4434,3 +4434,63 @@ button.warn {
     scroll-margin-top: 120px;
   }
 }
+
+/* 跳到正文：平时隐藏，键盘聚焦时出现在左上角 */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.site-main:focus {
+  outline: none;
+}
+
+/* 404 页 */
+.not-found-lead {
+  text-align: center;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.not-found-lead .eyebrow {
+  font-size: 15px;
+  letter-spacing: 0.2em;
+}
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.not-found-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 90, 181, 0.2);
+  background: #ffffff;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.not-found-links a:first-child {
+  background: var(--brand);
+  color: #ffffff;
+}

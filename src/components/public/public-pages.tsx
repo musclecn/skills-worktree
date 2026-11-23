@@ -13,6 +13,7 @@ import {
   getSolutionsData,
 } from "@/lib/data";
 import { localizePath } from "@/lib/i18n";
+import { buildOrganizationJsonLd } from "@/lib/seo";
 import { getShortVideos } from "@/lib/short-videos";
 import type { AppLocale } from "@/lib/types";
 import { HeroCarousel } from "@/components/public/HeroCarousel";
@@ -1488,6 +1489,7 @@ function SolutionGlassArtwork({
 export async function HomeView({ locale }: { locale: AppLocale }) {
   const [data, shortVideos] = await Promise.all([getHomeData(locale), getShortVideos(3)]);
   const siteConfig = data.site;
+  const organizationJsonLd = buildOrganizationJsonLd(locale, siteConfig);
 
   const heroTitle =
     siteConfig?.homeHeroTitle ||
@@ -1523,6 +1525,7 @@ export async function HomeView({ locale }: { locale: AppLocale }) {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organizationJsonLd }} />
       <HomeMarqueeAd locale={locale} />
 
       <section className={locale === "en" ? "hero-immersive home-hero-en" : "hero-immersive"}>
