@@ -94,8 +94,93 @@ const PROCESS_STEPS: { title: Bilingual; detail: Bilingual }[] = [
   },
 ];
 
-/** 公开作品。确认版权与发布授权后再添加；为空时不显示作品区。 */
-const AIGC_SHOWCASE: { title: Bilingual; summary: Bilingual; videoUrl: string; posterUrl: string }[] = [];
+/**
+ * 公开作品：均为 AI 生成的测试样片（负责人 2026-11-23 确认可公开，不点名制作平台）。
+ * 视频与封面放在服务器上传目录 /website2026/sztaxs-web/public/uploads/aigc/（数据盘挂载，不进镜像和代码仓库），
+ * 网页版统一转码为 720×1280 H.264 并开启快速起播。为空时不显示作品区。
+ */
+const AIGC_SHOWCASE: {
+  slug: string;
+  title: Bilingual;
+  episode: Bilingual;
+  genre: Bilingual;
+  durationSec: number;
+  summary: Bilingual;
+}[] = [
+  {
+    slug: "hexi-ep01",
+    title: { zh: "和熹传", en: "He Xi Zhuan" },
+    episode: { zh: "第一集《凤隐南阳》", en: "Ep. 1 · Phoenix in Nanyang" },
+    genre: { zh: "古装宫廷", en: "Historical palace" },
+    durationSec: 120,
+    summary: {
+      zh: "从邓绥出生讲到太子聘书送抵邓府，一纸婚约埋下宫廷风波。",
+      en: "From Deng Sui's birth to the crown prince's betrothal letter reaching the Deng family, a marriage that sets the palace in motion.",
+    },
+  },
+  {
+    slug: "hexi-ep02",
+    title: { zh: "和熹传", en: "He Xi Zhuan" },
+    episode: { zh: "第二集《命运转折》", en: "Ep. 2 · A Turn of Fate" },
+    genre: { zh: "古装宫廷", en: "Historical palace" },
+    durationSec: 120,
+    summary: {
+      zh: "窦皇后设下巫蛊之局，宋贵人百口莫辩，后宫格局由此改写。",
+      en: "Empress Dou stages a witchcraft plot, Consort Song cannot clear her name, and the balance of the inner palace shifts.",
+    },
+  },
+  {
+    slug: "houhai-ep01",
+    title: { zh: "穿过后海是我家", en: "Home Beyond Houhai" },
+    episode: { zh: "第一集《玻璃墙后的估价》", en: "Ep. 1 · The Appraisal Behind the Glass" },
+    genre: { zh: "都市情感", en: "Urban drama" },
+    durationSec: 120,
+    summary: {
+      zh: "家族资金链断裂，乔莞尔向干妈借两个亿被婉拒，转身才发现“新项目”只是借口。",
+      en: "With the family business out of cash, Qiao Wan'er asks her godmother for a 200-million loan, is turned down, and learns the “new project” was only an excuse.",
+    },
+  },
+  {
+    slug: "dujie-ep01",
+    title: { zh: "请勿高考时渡劫", en: "No Ascension Before the Gaokao" },
+    episode: { zh: "第一集《同桌说她穿越了》", en: "Ep. 1 · My Deskmate Says She Time-Traveled" },
+    genre: { zh: "校园喜剧", en: "Campus comedy" },
+    durationSec: 86,
+    summary: {
+      zh: "开学前一天，同桌说自己穿越成了万年女帝，回来第一件事却是借作业抄。",
+      en: "The day before school starts, his deskmate claims she lived ten thousand years as an empress, and her first request back is to copy his homework.",
+    },
+  },
+  {
+    slug: "fenjia-ep01",
+    title: { zh: "分家那天，我把钥匙交了", en: "The Day We Split, I Gave Up the Keys" },
+    episode: { zh: "第一集《交钥匙》", en: "Ep. 1 · Handing Over the Keys" },
+    genre: { zh: "家庭现实", en: "Family drama" },
+    durationSec: 78,
+    summary: {
+      zh: "分家时她交出家门钥匙，却拒绝签字放弃自己投进家族公司的三十万。",
+      en: "When the family splits, she hands over the house keys but refuses to sign away the 300,000 she invested in the family company.",
+    },
+  },
+  {
+    slug: "jirou-ep01",
+    title: { zh: "我在古代练肌肉", en: "Bodybuilding in Ancient Times" },
+    episode: { zh: "第一集《退婚》", en: "Ep. 1 · Broken Engagement" },
+    genre: { zh: "穿越 · 动漫风格", en: "Time travel · Anime style" },
+    durationSec: 95,
+    summary: {
+      zh: "健美冠军穿越成将军府瘦弱庶子，当众被退婚后，靠一个月苦练在擂台翻盘。",
+      en: "A bodybuilding champion wakes up as a frail son of a general's house, is publicly jilted, and turns the tables in the ring after a month of training.",
+    },
+  },
+];
+
+function formatDuration(seconds: number, zh: boolean) {
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  if (zh) return minutes > 0 ? `${minutes} 分${rest ? ` ${rest} 秒` : "钟"}` : `${rest} 秒`;
+  return `${minutes}:${String(rest).padStart(2, "0")}`;
+}
 
 export function AIGCView({ locale }: { locale: AppLocale }) {
   const zh = locale === "zh";
@@ -125,6 +210,13 @@ export function AIGCView({ locale }: { locale: AppLocale }) {
                   </a>
                 </div>
               ))}
+              {AIGC_SHOWCASE.length > 0 ? (
+                <div className="product-tree-group">
+                  <a className="product-tree-parent" href="#aigc-showcase">
+                    {zh ? "作品展示" : "Showcase"}
+                  </a>
+                </div>
+              ) : null}
               <div className="product-tree-group">
                 <a className="product-tree-parent" href="#aigc-process">
                   {zh ? "合作流程" : "How We Work"}
@@ -229,14 +321,35 @@ export function AIGCView({ locale }: { locale: AppLocale }) {
             <section className="product-cluster aigc-showcase-section" id="aigc-showcase">
               <header className="product-cluster-head">
                 <div>
-                  <h2>{zh ? "作品展示" : "Showcase"}</h2>
+                  <p className="eyebrow">{zh ? "作品展示" : "Showcase"}</p>
+                  <h2>{zh ? "AI 生成测试样片" : "AI-generated test episodes"}</h2>
                 </div>
+                <p>
+                  {zh
+                    ? "以下作品的画面、配音与字幕均由 AI 生成，是我们制作流程的测试样片，覆盖古装、都市、校园、家庭与动漫风格。"
+                    : "The visuals, voices and subtitles below are AI-generated test episodes from our production workflow, spanning historical, urban, campus, family and anime styles."}
+                </p>
               </header>
               <div className="aigc-showcase">
                 {AIGC_SHOWCASE.map((item) => (
-                  <article key={item.videoUrl} className="aigc-showcase-card">
-                    <video controls preload="none" playsInline poster={item.posterUrl} src={item.videoUrl} />
+                  <article key={item.slug} className="aigc-showcase-card">
+                    <div className="aigc-showcase-player">
+                      <video
+                        controls
+                        preload="none"
+                        playsInline
+                        poster={`/uploads/aigc/${item.slug}.jpg`}
+                        src={`/uploads/aigc/${item.slug}.mp4`}
+                        aria-label={`${t(item.title)} ${t(item.episode)}`}
+                      />
+                      <span className="aigc-ai-badge">{zh ? "AI 生成 · 测试样片" : "AI-generated · Test"}</span>
+                    </div>
+                    <div className="aigc-showcase-meta">
+                      <span>{t(item.genre)}</span>
+                      <span>{formatDuration(item.durationSec, zh)}</span>
+                    </div>
                     <h3>{t(item.title)}</h3>
+                    <p className="aigc-showcase-episode">{t(item.episode)}</p>
                     <p>{t(item.summary)}</p>
                   </article>
                 ))}

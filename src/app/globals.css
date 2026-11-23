@@ -4637,3 +4637,73 @@ button.warn {
     font-size: 13px;
   }
 }
+
+/* AIGC 作品展示 */
+.aigc-showcase-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.aigc-showcase-player {
+  position: relative;
+}
+
+.aigc-showcase-player video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 14px;
+  background: #071f42;
+  object-fit: cover;
+}
+
+.aigc-ai-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(7, 31, 66, 0.72);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.aigc-showcase-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.aigc-showcase-meta span + span {
+  color: var(--muted);
+}
+
+.aigc-showcase-card h3 {
+  margin: 0;
+  color: #13335d;
+  font-size: 17px;
+}
+
+.aigc-showcase-episode {
+  margin: 0;
+  color: #31557f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.aigc-showcase-card p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
