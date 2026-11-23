@@ -4494,3 +4494,146 @@ button.warn {
   background: var(--brand);
   color: #ffffff;
 }
+
+/* AIGC 栏目：评分维度与合作流程 */
+.aigc-dimensions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aigc-dimensions li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: #13335d;
+  font-weight: 600;
+}
+
+.aigc-dimensions li span {
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.aigc-dimensions li.is-gate {
+  border-color: rgba(223, 123, 36, 0.4);
+  background: #fff7ef;
+}
+
+.aigc-dimensions li.is-gate span {
+  color: var(--accent);
+}
+
+.aigc-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.aigc-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.aigc-step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.aigc-steps h3 {
+  margin: 0;
+  color: #13335d;
+  font-size: 16px;
+}
+
+.aigc-steps p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.aigc-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.aigc-showcase-card video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 14px;
+  background: #071f42;
+}
+
+@media (max-width: 980px) {
+  .aigc-dimensions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .aigc-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .aigc-steps li {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .aigc-showcase {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .aigc-showcase {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*
+ * 桌面导航保持单行：导航宽度按内容计算，亚像素取整会把最后一项挤到第二行。
+ * 981–1100px 的窄桌面屏略缩间距和字号，保证一行放得下。
+ */
+@media (min-width: 981px) {
+  .header-inner > .nav {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 981px) and (max-width: 1100px) {
+  .header-inner > .nav {
+    gap: 10px;
+  }
+
+  .header-inner > .nav a {
+    font-size: 13px;
+  }
+}

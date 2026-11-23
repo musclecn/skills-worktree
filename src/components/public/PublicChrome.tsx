@@ -28,6 +28,12 @@ export async function PublicChrome({
     label: locale === "zh" ? "AI财税智能体" : "AI Tax Agent",
     path: "/ai-agent",
   };
+  const aigcMenu = {
+    id: "fallback-aigc",
+    key: "aigc",
+    label: "AIGC",
+    path: "/aigc",
+  };
   const openPlatformMenu = {
     id: "fallback-open-platform",
     key: "open-platform",
@@ -47,6 +53,13 @@ export async function PublicChrome({
       insertIndex === -1
         ? [...normalizedMenus, aiAgentMenu]
         : [...normalizedMenus.slice(0, insertIndex), aiAgentMenu, ...normalizedMenus.slice(insertIndex)];
+  }
+  if (!normalizedMenus.some((menu) => menu.path === "/aigc" || menu.key === "aigc")) {
+    const aiAgentIndex = normalizedMenus.findIndex((menu) => menu.path === "/ai-agent" || menu.key === "ai-agent");
+    normalizedMenus =
+      aiAgentIndex === -1
+        ? [...normalizedMenus, aigcMenu]
+        : [...normalizedMenus.slice(0, aiAgentIndex + 1), aigcMenu, ...normalizedMenus.slice(aiAgentIndex + 1)];
   }
   if (!normalizedMenus.some((menu) => menu.path === "/open-platform" || menu.key === "open-platform")) {
     const insertIndex = normalizedMenus.findIndex((menu) => menu.path === "/short-videos" || menu.key === "short-videos");

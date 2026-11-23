@@ -1,0 +1,16 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="成片质量评审：逐项评分与返修闭环">
+  <defs><linearGradient id="bg" x1="124" y1="92" x2="1498" y2="856" gradientUnits="userSpaceOnUse"><stop stop-color="#0D4C9F"/><stop offset="0.52" stop-color="#0B63C7"/><stop offset="1" stop-color="#0A2E62"/></linearGradient><linearGradient id="panel" x1="430" y1="144" x2="1132" y2="748" gradientUnits="userSpaceOnUse"><stop stop-color="#F4F9FF" stop-opacity="0.9"/><stop offset="1" stop-color="#CFE4FF" stop-opacity="0.35"/></linearGradient><linearGradient id="frame" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7FC1FF"/><stop offset="1" stop-color="#2A6FD1"/></linearGradient></defs><rect width="1600" height="900" rx="28" fill="url(#bg)"/><circle cx="290" cy="198" r="180" fill="#77B7FF" fill-opacity="0.18"/><circle cx="1340" cy="736" r="230" fill="#6BD8FF" fill-opacity="0.14"/>
+  <rect x="300" y="120" width="1000" height="660" rx="36" fill="url(#panel)" stroke="#B9D8FF" stroke-opacity="0.45"/>
+  <rect x="370" y="180" width="360" height="30" rx="15" fill="#0A3874" fill-opacity="0.55"/>
+  <g fill="#0A3874" fill-opacity="0.3">
+    <rect x="370" y="250" width="260" height="20" rx="10"/><rect x="370" y="318" width="220" height="20" rx="10"/><rect x="370" y="386" width="280" height="20" rx="10"/><rect x="370" y="454" width="240" height="20" rx="10"/><rect x="370" y="522" width="250" height="20" rx="10"/><rect x="370" y="590" width="230" height="20" rx="10"/><rect x="370" y="658" width="270" height="20" rx="10"/>
+  </g>
+  <g fill="#D9EBFF" fill-opacity="0.7">
+    <rect x="700" y="246" width="440" height="28" rx="14"/><rect x="700" y="314" width="440" height="28" rx="14"/><rect x="700" y="382" width="440" height="28" rx="14"/><rect x="700" y="450" width="440" height="28" rx="14"/><rect x="700" y="518" width="440" height="28" rx="14"/><rect x="700" y="586" width="440" height="28" rx="14"/><rect x="700" y="654" width="440" height="28" rx="14"/>
+  </g>
+  <g fill="url(#frame)">
+    <rect x="700" y="246" width="410" height="28" rx="14"/><rect x="700" y="314" width="360" height="28" rx="14"/><rect x="700" y="382" width="330" height="28" rx="14"/><rect x="700" y="450" width="390" height="28" rx="14"/><rect x="700" y="518" width="400" height="28" rx="14"/><rect x="700" y="586" width="250" height="28" rx="14"/><rect x="700" y="654" width="370" height="28" rx="14"/>
+  </g>
+  <circle cx="1220" cy="196" r="44" fill="#12A475"/>
+  <path d="M1198 196l16 16 30-32" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

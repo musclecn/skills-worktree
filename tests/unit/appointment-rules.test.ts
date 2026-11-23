@@ -197,3 +197,15 @@ describe("native form field names", () => {
     expect(validateAppointmentInput(fromForm, { strictContact: true })).toBeNull();
   });
 });
+
+describe("AIGC section", () => {
+  it("preselects the AIGC topic and counts AIGC pages as product pages", async () => {
+    const { topicFromPath, normalizeAppointmentInput } = await import("@/lib/appointment");
+    const { isProductPath } = await import("@/lib/analytics");
+    expect(topicFromPath("/aigc")).toBe("aigc");
+    expect(normalizeAppointmentInput({ topic: "aigc" }).topic).toBe("aigc");
+    expect(isProductPath("/aigc")).toBe(true);
+    expect(isProductPath("/en/aigc")).toBe(true);
+    expect(topicFromPath("/ai-agent")).toBe("ai-agent");
+  });
+});

@@ -76,10 +76,10 @@ export function stripLocalePrefix(path: string) {
   return path.startsWith("/en/") ? path.slice(3) : path;
 }
 
-/** 产品类页面：产品、AI 智能体、解决方案、开放平台。 */
+/** 产品类页面：产品、AI 智能体、AIGC、解决方案、开放平台。 */
 export function isProductPath(path: string) {
   const base = stripLocalePrefix(path);
-  return /^\/(products|ai-agent|solutions|open-platform)(\/|$)/.test(base);
+  return /^\/(products|ai-agent|aigc|solutions|open-platform)(\/|$)/.test(base);
 }
 
 export function articleSlugFromPath(path: string) {

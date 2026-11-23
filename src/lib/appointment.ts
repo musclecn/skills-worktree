@@ -34,6 +34,7 @@ export const APPOINTMENT_TOPICS = [
   { key: "overseas", zh: "海外电子发票", en: "Overseas e-invoicing" },
   { key: "ai-agent", zh: "AI 财税智能体", en: "AI tax agent" },
   { key: "receipt", zh: "电子收据", en: "Electronic receipts" },
+  { key: "aigc", zh: "AIGC 短剧与视频制作", en: "AIGC short drama & video" },
   { key: "data-api", zh: "数据服务与开放平台", en: "Data services & open platform" },
   { key: "other", zh: "其他", en: "Other" },
 ] as const;
@@ -66,6 +67,7 @@ export function topicLabel(key: string | null | undefined, locale: AppLocale = "
 export function topicFromPath(path: string | null | undefined): AppointmentTopicKey | "" {
   if (!path) return "";
   const rules: [RegExp, AppointmentTopicKey][] = [
+    [/^\/aigc/, "aigc"],
     [/^\/ai-agent/, "ai-agent"],
     [/^\/open-platform/, "data-api"],
     [/leqi|smart-tax-filing|individual-income-tax/, "leqi"],
